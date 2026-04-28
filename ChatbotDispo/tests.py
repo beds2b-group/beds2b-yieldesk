@@ -4,6 +4,7 @@ import chatbot.Chatbot as Chatbot
 import chatbot.utils as utils
 import sys
 import chatbot.Logger as Logger
+import requests
 
 from services.ServiceDispo import ServiceDispo
 from chatbot.utils import JSONReducer
@@ -55,8 +56,9 @@ def handler(ticketId):
 
     logger.info(f"Final response: {finalResponse}")
 
-    zammad_service.postResponseTicket(finalResponse, ticketId)
-
+    response_send = zammad_service.postResponseTicket(finalResponse, ticketId)
+    logger.info(f"Response sent: {response_send}")
+    
     return 'Hello from AWS Lambda using Python' + sys.version + '!'
 
 def getBody(response):
@@ -72,5 +74,5 @@ def cleanBody(body):
 
 
 
-handler(50)
+handler(54)
 

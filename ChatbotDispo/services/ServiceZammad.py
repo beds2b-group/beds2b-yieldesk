@@ -19,7 +19,7 @@ class ServiceZammad:
             "ticket_id": ticketid,
             "subject": "Call note",
             "body": iaresponse,
-            "content_type": "text/html",
+            "content_type": "text/json",
             "type": "phone",
             "internal": False,
             "sender": "Agent",
@@ -27,12 +27,14 @@ class ServiceZammad:
         })
 
         headers = {
-            # 'Content-Type': 'application/json',
-            'Content-Type': 'application/html',
+            'Content-Type': 'application/json',
+            # 'Content-Type': 'application/html',
             'Authorization': self.auth
         }
 
         response = requests.request("POST", url, headers=headers, data=payload)
+        
+        return response
 
 
     def getTicketArticles(self, ticketid):
@@ -43,7 +45,4 @@ class ServiceZammad:
             'Authorization': self.auth
         }
 
-        response = requests.request("GET", url, headers=headers)
-
-
-        return response
+        return requests.request("GET", url, headers=headers)
