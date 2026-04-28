@@ -18,9 +18,9 @@ class ServiceDispo:
             "IncludeOriginalAvailabilityRequest": False,
             "IncludeChannelRequestResponse": True,
             "DestinationType": 0,
-            "DestinationCodes": [
+            "DestinationCodes": 
                 hotelcod
-            ],
+            ,
             "AccommodationDates": {
                 "From": datefrom,
                 "To": dateto
