@@ -122,3 +122,4 @@ schema.graphql
 
 # Packages
 *.zpm
+ChatbotDispo/.env
