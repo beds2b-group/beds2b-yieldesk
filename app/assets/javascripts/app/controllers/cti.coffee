@@ -53,6 +53,12 @@ class App.CTI extends App.Controller
           user = App.User.find(user_id)
         @newTicket(user)
       )
+      $('.call-widget').find('.js-acceptCall').on('click', =>
+        @sendSoftphoneCommand('answer-call')
+      )
+      $('.call-widget').find('.js-rejectCall').on('click', =>
+        @sendSoftphoneCommand('reject-call')
+      )
     )
     @controllerBind('auth', (data) =>
       @meta.counter = 0
@@ -235,6 +241,12 @@ class App.CTI extends App.Controller
       #container: @el.closest('.content')
       callback: @ticketNew
     )
+  
+  acceptCall: (user) =>
+    if user
+      @navigate("ticket/create/customer/#{user.id}")
+      return
+    @navigate('ticket/create')
 
   ticketNew: (customer) ->
     @navigate "#ticket/create/customer/#{customer.id}"
@@ -276,6 +288,21 @@ class App.CTI extends App.Controller
 
   currentPosition: =>
     @$('.main').scrollTop()
+
+  sendSoftphoneCommand: (action) ->
+    iframe = document.getElementById('saraphone_iframe')
+
+    if !iframe? || !iframe.contentWindow?
+      console.warn(__('No se encontró el iframe de SaraPhone'))
+      return
+
+    iframe.contentWindow.postMessage(
+      {
+        source: 'zammad'
+        action: action
+      },
+      'https://beds2b-softphone.senator.tools'
+    )
 
 class WidgetAvatar extends App.ControllerObserver
   @extend App.PopoverProvidable
