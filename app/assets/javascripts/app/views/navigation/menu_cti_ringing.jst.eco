@@ -60,10 +60,10 @@
           <% end %>
           </div>
           <div class='call-btn-container' style='display: flex; width: 100%; flex; justify-content: space-around;'>
-            <div class="btn js-acceptCall call-btn-icon" title="Hang Out" data-user-id="<% if user: %><%- user.id %><% end %>">
+            <div class="js-acceptCall call-btn-icon" title="Accept" data-user-id="<% if user: %><%- user.id %><% end %>">
                 <img style="max-width: 32px;" src="assets/images/icons/call-in.svg">
             </div>
-            <div class="btn js-rejectCall call-btn-icon" title="Hang Out" data-user-id="<% if user: %><%- user.id %><% end %>">
+            <div class="js-rejectCall call-btn-icon" title="Hang Out" data-user-id="<% if user: %><%- user.id %><% end %>">
                 <img style="max-width: 32px;" src="assets/images/icons/call-hang-out.svg">
             </div>
           </div>

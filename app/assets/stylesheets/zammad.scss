@@ -300,6 +300,29 @@ h3 + .description {
   margin-top: 0;
 }
 
+.btn-softphone {
+  position: fixed;
+  right: 17.5%;
+  bottom: 10%;
+  border-radius: 50%;
+  display: flex;
+  height: 5rem;
+  width: 5rem;
+  align-items: center;
+  justify-content: center;
+  background-color: #aeffae;
+  border: green;
+  cursor: pointer;
+}
+
+.js-softphonePanel {
+  display: none;
+}
+
+.js-softphonePanel.is-open {
+  display: block;
+}
+
 strong {
   font-weight: 500;
 }
@@ -1077,11 +1100,11 @@ pre code {
   }
 }
 
-.btn + .btn:not(.btn--no-margin),
-.btn + .buttonDropdown,
-.buttonDropdown + .buttonDropdown {
-  @include bidi-style(margin-left, 10px, margin-right, 0);
-}
+// .btn + .btn:not(.btn--no-margin),
+// .btn + .buttonDropdown,
+// .buttonDropdown + .buttonDropdown {
+//   @include bidi-style(margin-left, 10px, margin-right, 0);
+// }
 
 .btn + .btn.align-right {
   @include bidi-style(margin-left, auto, margin-right, 0);
@@ -4850,6 +4873,10 @@ footer {
   }
 }
 
+.call-btn-icon {
+  cursor: pointer;
+}
+
 .call-widgets {
   overflow-y: auto;
   max-height: 30vh;
@@ -6372,11 +6399,10 @@ a.list-group-item.active > .badge,
   padding: 2px 0 0 50px;
   position: relative;
   min-height: 40px;
-  padding-right: 48px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-width: 192px;
+  min-width: 150px;
 
   .avatar {
     position: absolute;
@@ -6390,7 +6416,7 @@ a.list-group-item.active > .badge,
   }
 
   .btn.js-newTicket {
-    position: absolute;
+    // position: absolute;
     right: 0;
   }
 }
