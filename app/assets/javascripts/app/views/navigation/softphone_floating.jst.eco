@@ -1,15 +1,18 @@
-<div class="softphone-floating js-softphoneFloating" style="position: fixed;top: 20%;right: 17.5%;">
-  <div class="softphone-floating__panel js-softphonePanel">
+<div class="softphone-floating js-softphoneFloating" 
+style="position: fixed;top: 20%;right: 2%; display:flex; flex-direction: column; justify-content: center; 
+align-items:center">
+  <div class="softphone-floating__panel js-softphonePanel" style="position: relative;">
     <iframe class="softphone-floating__iframe"
             id="saraphone_iframe"
             src="https://beds2b-softphone.senator.tools"
             allow="microphone; camera; autoplay; notifications"
-            style="height: 70rem;border: none;">
+            style="height: 62rem;border: none;">
     </iframe>
   </div>
+
+  <button class="btn-softphone js-softphoneToggle"
+          title="Softphone">
+    <%- @Icon('phone') %>
+  </button>
 </div>
 
-<button class="btn-softphone js-softphoneToggle"
-          title="Softphone">
-  <%- @Icon('phone') %>
-</button>
