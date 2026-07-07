@@ -294,17 +294,29 @@ h3 + .description {
 
 .btn-softphone {
   position: fixed;
-  right: 17.5%;
-  bottom: 10%;
+  right: 8%;
+  bottom: 8.2%;
   border-radius: 50%;
   display: flex;
   height: 5rem;
   width: 5rem;
   align-items: center;
   justify-content: center;
-  background-color: #aeffae;
+  background: #39aa68;
   border: green;
   cursor: pointer;
+}
+
+.softphone-floating__panel.js-softphonePanel {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15), 0 5px 10px rgba(0, 0, 0, 0.1);
+    
+    border-radius: 8px;
+    
+    overflow: hidden;
+    
+    background-color: #fff;
+
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .js-softphonePanel {
