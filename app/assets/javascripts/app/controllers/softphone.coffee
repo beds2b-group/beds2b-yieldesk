@@ -9,21 +9,28 @@ class App.Softphone extends App.ControllerPermanent
       'menu:render',
       =>
         console.log 'Navbar renderizado, pinto softphone flotante'
-        @renderSoftphone()
+        if @permissionCheck('ticket.agent') or @permissionCheck('admin')
+          @renderSoftphone()
+        else
+          @removeSoftphone()
+
       'softphone_menu_render'
     )
 
     @controllerBind(
       'ui:rerender',
       =>
-        @renderSoftphone()
+        if @permissionCheck('ticket.agent') or @permissionCheck('admin')
+          @renderSoftphone()
+        else
+          @removeSoftphone()
       'softphone_ui_rerender'
     )
 
   renderSoftphone: ->
     return if $('.navigation').length is 0
 
-    # Evita duplicados si Zammad repinta el menú.
+    
     $('.js-softphoneFloating').remove()
 
     html = App.view('navigation/softphone_floating')()
@@ -45,12 +52,31 @@ class App.Softphone extends App.ControllerPermanent
         e.preventDefault()
         $('.js-softphonePanel').removeClass('is-open')
       )
+  
+  removeSoftphone: =>
+    console.log 'Eliminando softphone flotante'
+
+    iframe = document.getElementById('saraphone_iframe')
+
+    if !iframe? || !iframe.contentWindow?
+      console.warn(__('No se encontró el iframe de SaraPhone'))
+      return
+
+    iframe.contentWindow.postMessage(
+      {
+        source: 'zammad'
+        action: 'reject-call'
+      },
+      'https://beds2b-softphone.senator.tools'
+    )
+
+    $('#floating-softphone').remove()
 
 
 App.Config.set('Softphone',
   {
     controller: 'Softphone'
-    permission: ['cti.agent']
+    permission: ['ticket.agent']
   },
   'permanentTask'
 )
