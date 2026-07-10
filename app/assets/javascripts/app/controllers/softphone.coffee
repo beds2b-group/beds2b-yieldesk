@@ -30,8 +30,10 @@ class App.Softphone extends App.ControllerPermanent
   renderSoftphone: ->
     return if $('.navigation').length is 0
 
-    
-    $('.js-softphoneFloating').remove()
+    existing = $('.js-softphoneFloating')
+    if existing.length > 0
+      @bindSoftphoneEvents()
+      return
 
     html = App.view('navigation/softphone_floating')()
     $('body').append(html)
