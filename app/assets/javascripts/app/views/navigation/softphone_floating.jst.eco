@@ -1,5 +1,5 @@
 <div class="softphone-floating js-softphoneFloating" 
-style="position: fixed;top: 20%;right: 2%; display:flex; flex-direction: column; justify-content: center; 
+style="position: fixed;bottom: 11%;right: 2%; display:flex; flex-direction: column; justify-content: center; 
 align-items:center">
   <div class="softphone-floating__panel js-softphonePanel" style="position: relative;">
     <iframe class="softphone-floating__iframe"

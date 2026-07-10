@@ -26,6 +26,27 @@ class App.Softphone extends App.ControllerPermanent
           @removeSoftphone()
       'softphone_ui_rerender'
     )
+  
+  bindSoftphoneResize: =>
+    $(window).off('message.softphoneResize')
+
+    $(window).on 'message.softphoneResize', (event) =>
+      originalEvent = event.originalEvent
+
+      return if originalEvent.origin isnt 'https://beds2b-softphone.senator.tools'
+      return if !originalEvent.data
+      return if originalEvent.data.type isnt 'resize'
+
+      height = parseInt(originalEvent.data.height, 10)
+      return if isNaN(height)
+
+      minHeight = 200
+      maxHeight = 500
+
+      height = Math.max(minHeight, height)
+      height = Math.min(maxHeight, height)
+
+      $('#saraphone_iframe').css('height', "#{height}px")
 
   renderSoftphone: ->
     return if $('.navigation').length is 0
@@ -36,6 +57,7 @@ class App.Softphone extends App.ControllerPermanent
     html = App.view('navigation/softphone_floating')()
     $('body').append(html)
 
+    @bindSoftphoneResize()
     @bindSoftphoneEvents()
 
   bindSoftphoneEvents: ->
