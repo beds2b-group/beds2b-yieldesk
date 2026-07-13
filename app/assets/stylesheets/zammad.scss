@@ -301,9 +301,12 @@ h3 + .description {
 }
 
 .btn-softphone {
-  position: fixed;
-  right: 8%;
-  bottom: 8.2%;
+  // position: fixed;
+  // right: 8%;
+  // bottom: 8.2%;
+  position: static;
+  margin: -25px auto 0px;
+  z-index: 500;
   border-radius: 50%;
   display: flex;
   height: 5rem;
