@@ -1,3 +1,7 @@
+# Modificado por Beds2B el 2026-07-06: botones de aceptar y rechazar del widget
+# de llamada conectados al softphone (sendSoftphoneCommand).
+# Lista completa de cambios sobre Zammad en MODIFICATIONS.md.
+
 class App.CTI extends App.Controller
   @extend App.PopoverProvidable
   @registerPopovers 'User'

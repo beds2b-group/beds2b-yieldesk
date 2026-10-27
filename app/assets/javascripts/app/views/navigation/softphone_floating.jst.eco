@@ -1,6 +1,7 @@
 <div class="softphone-floating js-softphoneFloating" 
 style="position: fixed;bottom: 11%;right: 2%; display:flex; flex-direction: column; justify-content: center; 
 align-items:center; z-index: 400">
+  <!-- Copyright (C) 2026 Beds2B. Fichero añadido por Beds2B el 2026-07-06, última modificación el 2026-07-13. Se distribuye bajo AGPL-3.0 como parte de esta versión modificada de Zammad. Ver MODIFICATIONS.md. -->
   <div class="softphone-floating__panel js-softphonePanel" style="position: relative;">
     <iframe class="softphone-floating__iframe"
             id="saraphone_iframe"
