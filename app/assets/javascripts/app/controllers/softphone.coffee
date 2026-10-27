@@ -1,3 +1,7 @@
+# Copyright (C) 2026 Beds2B. Fichero añadido por Beds2B el 2026-07-06, última
+# modificación el 2026-07-10. Se distribuye bajo AGPL-3.0 como parte de esta
+# versión modificada de Zammad. Ver MODIFICATIONS.md.
+
 class App.Softphone extends App.ControllerPermanent
 
   constructor: ->

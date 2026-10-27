@@ -1,4 +1,5 @@
 <div class="call-widgets">
+  <!-- Modificado por Beds2B el 2026-07-06: iconos y textos de los botones de aceptar y rechazar. Ver MODIFICATIONS.md. -->
   <% for item in @item: %>
     <div class="call-widget">
       <div class="call-widget-header">
