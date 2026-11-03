@@ -1,6 +1,6 @@
-// Modificado por Beds2B el 2026-07-13: estilos del softphone flotante y del
-// widget de llamada entrante. Lista completa de cambios sobre Zammad en
-// MODIFICATIONS.md.
+// Modificado por Beds2B el 2026-07-13: estilos del widget de llamada entrante.
+// Última modificación el 2026-10-31: se quitan los estilos del softphone
+// flotante (iframe). Lista completa de cambios sobre Zammad en MODIFICATIONS.md.
 
 @use 'sass:list';
 @use 'sass:string';
@@ -302,44 +302,6 @@ p {
 
 h3 + .description {
   margin-top: 0;
-}
-
-.btn-softphone {
-  // position: fixed;
-  // right: 8%;
-  // bottom: 8.2%;
-  position: static;
-  margin: -25px auto 0px;
-  z-index: 500;
-  border-radius: 50%;
-  display: flex;
-  height: 5rem;
-  width: 5rem;
-  align-items: center;
-  justify-content: center;
-  background: #39aa68;
-  border: green;
-  cursor: pointer;
-}
-
-.softphone-floating__panel.js-softphonePanel {
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15), 0 5px 10px rgba(0, 0, 0, 0.1);
-    
-    border-radius: 8px;
-    
-    overflow: hidden;
-    
-    background-color: #fff;
-
-    border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.js-softphonePanel {
-  display: none;
-}
-
-.js-softphonePanel.is-open {
-  display: block;
 }
 
 strong {

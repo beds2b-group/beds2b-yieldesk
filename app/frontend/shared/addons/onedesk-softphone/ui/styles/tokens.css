@@ -1,0 +1,57 @@
+/* Copyright (C) 2026 Beds2B. Generado por zammad:sync desde beds2b-softphone: no editar aquí. Se distribuye bajo AGPL-3.0 como parte de esta versión modificada de Zammad. Ver MODIFICATIONS.md. */
+
+/* Variables del diseño (docs/design/Telefono.html), en la raíz del Shadow DOM (ADR-008). Algún día
+   podrán apuntar a los tokens de Zammad. `all: initial` corta lo que el host heredaría de la página
+   de Zammad (fuente, color, interlineado). */
+:host {
+  all: initial;
+  display: block;
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 400;
+
+  --sp-font: arial, helvetica, sans-serif;
+  --sp-color-text: #1f2933;
+  --sp-color-text-2: #4b5563;
+  --sp-color-text-muted: #6b7280;
+  --sp-color-text-faint: #9aa3ad;
+  --sp-color-surface: #fff;
+  --sp-color-surface-2: #f4f6f8;
+  --sp-color-surface-hover: #e6eaee;
+  --sp-color-surface-active: #dde3e8;
+  --sp-color-highlight: #eef3fb;
+  --sp-color-border: #e3e7eb;
+  --sp-color-divider: #eef0f2;
+  --sp-color-primary: #4b8df8;
+  --sp-color-primary-hover: #3b7de8;
+  --sp-color-primary-soft: #dbe7fb;
+  --sp-color-primary-text: #3b6fc4;
+  --sp-color-success: #38a169;
+  --sp-color-success-hover: #2f8f5b;
+  --sp-color-success-soft: #e6f4ec;
+  --sp-color-danger: #e05252;
+  --sp-color-danger-hover: #cf4444;
+  --sp-color-danger-soft: #fde2e2;
+  --sp-color-danger-soft-hover: #fbd3d3;
+  --sp-color-warning-soft: #fdefd3;
+  --sp-color-warning-text: #b45309;
+  --sp-color-wrap-up-soft: #ede9fe;
+  --sp-color-wrap-up-text: #6d28d9;
+  --sp-color-status-offline: #9aa3ad;
+  --sp-color-status-available: #22c55e;
+  --sp-color-status-busy: #4b8df8;
+  --sp-color-status-wrap-up: #8b5cf6;
+  --sp-color-status-paused: #f59e0b;
+  --sp-radius-panel: 6px;
+  --sp-radius-field: 8px;
+  --sp-radius-button: 10px;
+  --sp-shadow-panel: 0 2px 10px rgba(0, 0, 0, 0.12);
+  --sp-shadow-menu: 0 8px 20px rgba(0, 0, 0, 0.14);
+  --sp-focus-ring: 0 0 0 2px var(--sp-color-text);
+}
+
+:host([data-position='bottom-left']) {
+  right: auto;
+  left: 24px;
+}

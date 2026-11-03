@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "provider": "twilio",
+  "apiBase": "/onedesk",
+  "edge": "dublin",
+  "debug": false,
+  "ui": {
+    "position": "bottom-right",
+    "zIndex": 400,
+    "language": "es",
+    "defaultCountry": "es"
+  }
+}

@@ -1,0 +1,255 @@
+/* Copyright (C) 2026 Beds2B. Generado por zammad:sync desde beds2b-softphone: no editar aquí. Se distribuye bajo AGPL-3.0 como parte de esta versión modificada de Zammad. Ver MODIFICATIONS.md. */
+
+.sp-agents {
+  flex: 1;
+  min-height: 0;
+}
+
+.sp-agents__title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 0 2px;
+}
+
+.sp-agents__back {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: var(--sp-radius-field);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sp-color-text);
+  background: none;
+}
+
+.sp-agents__back:hover {
+  background: var(--sp-color-surface-2);
+}
+
+.sp-agents__title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.sp-agents .sp-call-strip {
+  margin-top: 14px;
+}
+
+/* Número externo: campo como el del marcado y el botón de transferir de cada agente. */
+.sp-agents__external {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.sp-agents__external-field {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--sp-color-border);
+  border-radius: var(--sp-radius-field);
+  background: var(--sp-color-surface-2);
+}
+
+.sp-agents__external-number {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+}
+
+.sp-agents__external-input {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  padding: 0 10px;
+  border: none;
+  font-size: 14px;
+  color: var(--sp-color-text);
+  background: none;
+}
+
+.sp-agents__external-input::placeholder {
+  color: var(--sp-color-text-faint);
+}
+
+/* La lista se desplaza dentro de la tarjeta (301 × 497 en el diseño). */
+.sp-agents__list {
+  max-height: 250px;
+  margin: 12px 0 0;
+  padding: 0 2px 0 0;
+  list-style: none;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sp-agents__item {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border: 1px solid var(--sp-color-border);
+  border-radius: var(--sp-radius-field);
+}
+
+.sp-agents__avatar {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--sp-color-primary-text);
+  background: var(--sp-color-primary-soft);
+}
+
+.sp-agents__avatar-dot {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 11px;
+  height: 11px;
+  border: 2px solid var(--sp-color-surface);
+}
+
+.sp-agents__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sp-agents__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.sp-agents__meta {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.sp-agents__badge {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+  color: var(--sp-color-text-2);
+  background: var(--sp-color-surface-2);
+}
+
+.sp-agents__badge--available {
+  color: var(--sp-color-success-hover);
+  background: var(--sp-color-success-soft);
+}
+
+.sp-agents__badge--reserved,
+.sp-agents__badge--on-call {
+  color: var(--sp-color-primary-text);
+  background: var(--sp-color-primary-soft);
+}
+
+.sp-agents__badge--paused {
+  color: var(--sp-color-warning-text);
+  background: var(--sp-color-warning-soft);
+}
+
+.sp-agents__badge--wrap-up {
+  color: var(--sp-color-wrap-up-text);
+  background: var(--sp-color-wrap-up-soft);
+}
+
+.sp-agents__extension {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--sp-color-text-muted);
+}
+
+.sp-agents__transfer {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  border-radius: var(--sp-radius-field);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sp-color-text);
+  background: var(--sp-color-surface-2);
+}
+
+/* El agente al que se está transfiriendo se queda resaltado, como al pasar el ratón. */
+.sp-agents__transfer:not(:disabled):hover,
+.sp-agents__transfer--pending,
+.sp-agents__transfer--pending:disabled {
+  color: #fff;
+  background: var(--sp-color-success);
+  opacity: 1;
+}
+
+.sp-agents__message {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 160px;
+  padding: 0 12px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--sp-color-text-muted);
+}
+
+.sp-agents__retry {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #fff;
+  background: var(--sp-color-primary);
+}
+
+.sp-agents__footer {
+  flex-shrink: 0;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--sp-color-divider);
+  text-align: center;
+  font-size: 12px;
+  color: var(--sp-color-text-muted);
+}
+
+.sp-agents__footer--pending {
+  font-weight: bold;
+  color: var(--sp-color-success);
+}

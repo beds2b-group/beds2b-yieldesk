@@ -1,0 +1,111 @@
+// Copyright (C) 2026 Beds2B. Generado por zammad:sync desde beds2b-softphone: no editar aquí.
+// Se distribuye bajo AGPL-3.0 como parte de esta versión modificada de Zammad. Ver MODIFICATIONS.md.
+
+import type { Messages } from './es.ts'
+
+export const en: Messages = {
+  'header.agent': '{extension} ({name})',
+  'header.connecting': 'Connecting…',
+
+  'status.offline': 'Offline',
+  'status.available': 'Available',
+  'status.reserved': 'Reserved',
+  'status.on-call': 'On call',
+  'status.wrap-up': 'Wrap-up',
+  'status.paused': 'Paused',
+  'status.pausedWith': 'Paused · {reason}',
+
+  'actions.label': 'Agent actions',
+  'actions.redial': 'Redial',
+  'actions.ringMute': 'Mute',
+  'actions.ringMuteTitle': 'Mute the ringtone',
+  'actions.ringUnmuteTitle': 'Unmute the ringtone',
+  'actions.pause': 'Pause',
+  'actions.resume': 'Back',
+  'actions.resumeTitle': 'Back to available',
+  'actions.logout': 'Sign out',
+
+  'pause.label': 'Pause reason',
+
+  'logout.withCall': 'There is a call in progress. Signing out will hang it up.',
+  'logout.confirm': 'Sign out and hang up',
+  'logout.cancel': 'Cancel',
+
+  'dial.numberLabel': 'Number',
+  'dial.placeholder': 'Number to dial',
+  'dial.delete': 'Delete',
+  'dial.call': 'Call',
+  'dial.hangup': 'Hang up',
+  'dial.calling': 'Calling {number}…',
+  'dial.agents': 'Agents',
+  'dial.country': 'Country: {name}',
+  'dial.countrySearch': 'Search country or code',
+  'dial.countryList': 'Countries',
+  'dial.noCountries': 'No matching country',
+
+  'keypad.label': 'Keypad',
+
+  'incoming.title': 'Incoming call',
+  'incoming.answer': 'Answer',
+  'incoming.reject': 'Reject',
+
+  'call.mute': 'Mute',
+  'call.unmute': 'Unmute',
+  'call.muted': 'Microphone muted',
+  'call.hangup': 'Hang up',
+  'call.transfer': 'Transfer',
+  'call.ending': 'Ending…',
+
+  'agents.title': 'Transfer call',
+  'agents.back': 'Back',
+  'agents.list': 'Agents',
+  'agents.noCall': 'No active call',
+  'agents.loading': 'Loading agents…',
+  'agents.loadFailed': 'The agent list could not be loaded.',
+  'agents.empty': 'No other agents are online.',
+  'agents.extension': 'Ext. {extension}',
+  'agents.transferTo': 'Transfer to {name}',
+  'agents.hintNoCall': 'Start a call to be able to transfer it',
+  'agents.hintSelect': 'Select an agent to transfer the call',
+  'agents.transferring': 'Transferring to {name}…',
+  'agents.transferringUnknown': 'Transferring the call…',
+  'agents.externalLabel': 'External number',
+  'agents.externalPlaceholder': 'Transfer to a number',
+  'agents.externalTransfer': 'Transfer to this number',
+
+  'connection.connecting': 'Connecting to One-Desk…',
+  'connection.registering': 'Registering the phone…',
+  'connection.retrying': 'It will retry automatically.',
+  'connection.retry': 'Retry',
+  'connection.signedOut': 'You have signed out of the phone. Reload the page to connect again.',
+
+  'notice.soundLocked': 'Sound is off: click anywhere',
+  'notice.dismiss': 'Close',
+
+  'launcher.open': 'Open the phone',
+  'launcher.close': 'Close the phone',
+
+  'notification.title': 'Incoming call',
+  'notification.body': 'Call from {from}',
+
+  'errors.mic-denied':
+    'The browser is blocking the microphone. Allow it in the address bar and press Retry.',
+  'errors.not-registered': 'The phone is not registered.',
+  'errors.token-expired': 'The phone session has expired.',
+  'errors.network': 'There is no connection to the server.',
+  'errors.provider': 'The voice service failed.',
+  'errors.backend': 'One-Desk returned an error.',
+  'errors.unauthenticated': 'You are not signed in to Zammad. Sign in to use the phone.',
+  'errors.forbidden': 'Your user is not an active One-Desk agent.',
+  'errors.conflict': 'This cannot be done right now.',
+
+  'problems.target_unavailable': 'That agent is no longer available.',
+  'problems.transfer_in_progress': 'A transfer is already in progress.',
+  'problems.call_not_active': 'The call is no longer active.',
+  'problems.not_your_call': 'This call is no longer yours.',
+  'problems.invalid_number': 'The number is not valid: include the country code.',
+  'problems.number_not_allowed': 'Calls cannot be transferred to that number.',
+  'problems.agent_busy': 'You cannot change your status while handling a call.',
+  'problems.invalid_status_transition': 'You cannot switch to that status right now.',
+  'problems.invalid_pause_reason': 'That pause reason no longer exists.',
+}

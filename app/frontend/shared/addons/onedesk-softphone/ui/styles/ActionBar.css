@@ -1,0 +1,52 @@
+/* Copyright (C) 2026 Beds2B. Generado por zammad:sync desde beds2b-softphone: no editar aquí. Se distribuye bajo AGPL-3.0 como parte de esta versión modificada de Zammad. Ver MODIFICATIONS.md. */
+
+.sp-actions {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+  margin-top: 12px;
+}
+
+.sp-actions__button {
+  height: 46px;
+  border: 2px solid transparent;
+  border-radius: 9px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 0;
+  color: var(--sp-color-text);
+  background: var(--sp-color-surface-2);
+}
+
+.sp-actions__button:not(:disabled):hover {
+  background: var(--sp-color-surface-hover);
+}
+
+.sp-actions__button:focus-visible {
+  box-shadow: none;
+  border-color: var(--sp-color-text);
+}
+
+.sp-actions__button--on,
+.sp-actions__button--on:not(:disabled):hover {
+  background: var(--sp-color-primary-soft);
+}
+
+.sp-actions__button--paused,
+.sp-actions__button--paused:not(:disabled):hover {
+  background: var(--sp-color-warning-soft);
+}
+
+.sp-actions__label {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 10px;
+  font-weight: bold;
+  color: var(--sp-color-text-2);
+}

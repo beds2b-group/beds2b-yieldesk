@@ -1,3 +1,5 @@
+<%# Modificado por Beds2B el 2026-10-30: carga el softphone de Beds2B (entrypoint de Vite). %>
+<%# Lista completa de cambios sobre Zammad en MODIFICATIONS.md. %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,6 +29,10 @@
   <% else %>
     <%= javascript_include_tag "application", nonce: true, :defer => 'defer' %>
   <% end %>
+
+  <%# Softphone de Beds2B (beds2b-softphone). Va después de application.js: cuando se ejecuta, %>
+  <%# Zammad ya ha comprobado la sesión. %>
+  <%= vite_typescript_tag 'softphone', nonce: true %>
 
   <%# Statically include external files with a nonce here to conform to CSP properly. %>
   <%# Required by form channel configuration preview. %>

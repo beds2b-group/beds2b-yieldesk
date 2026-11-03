@@ -1,5 +1,7 @@
 # Modificado por Beds2B el 2026-07-06: botones de aceptar y rechazar del widget
-# de llamada conectados al softphone (sendSoftphoneCommand).
+# de llamada conectados al softphone (sendSoftphoneCommand). Última modificación
+# el 2026-10-31: las órdenes van solo al softphone nuevo (CustomEvent); el iframe
+# se ha retirado.
 # Lista completa de cambios sobre Zammad en MODIFICATIONS.md.
 
 class App.CTI extends App.Controller
@@ -294,19 +296,10 @@ class App.CTI extends App.Controller
     @$('.main').scrollTop()
 
   sendSoftphoneCommand: (action) ->
-    iframe = document.getElementById('saraphone_iframe')
-
-    if !iframe? || !iframe.contentWindow?
-      console.warn(__('No se encontró el iframe de SaraPhone'))
-      return
-
-    iframe.contentWindow.postMessage(
-      {
-        source: 'zammad'
-        action: action
-      },
-      'https://beds2b-softphone.senator.tools'
-    )
+    # Softphone nuevo (beds2b-softphone): orden por CustomEvent en la misma página.
+    command = { 'answer-call': 'answer', 'reject-call': 'reject' }[action]
+    if command
+      window.dispatchEvent(new CustomEvent('onedesk-softphone:command', detail: { command: command }))
 
 class WidgetAvatar extends App.ControllerObserver
   @extend App.PopoverProvidable

@@ -1,4 +1,6 @@
 // Copyright (C) 2012-2026 Zammad Foundation, https://zammad-foundation.org/
+// Modificado por Beds2B el 2026-10-30: excepción de reglas para el softphone de Beds2B.
+// Lista completa de cambios sobre Zammad en MODIFICATIONS.md.
 
 import fs from 'fs'
 import path from 'path'
@@ -55,6 +57,20 @@ export default defineConfigWithVueTs(
       'zammad/zammad-detect-translatable-string': 'error',
       'zammad/zammad-tailwind-ltr': 'error',
       'zammad/zammad-symbol-description': 'error',
+    },
+  },
+
+  // Softphone de Beds2B, generado por zammad:sync desde beds2b-softphone: lleva la cabecera de
+  // Beds2B y traduce con su propio t(), no con __().
+  {
+    name: 'beds2b/onedesk-softphone',
+    files: [
+      'app/frontend/shared/addons/onedesk-softphone/**',
+      'app/frontend/entrypoints/softphone.ts',
+    ],
+    rules: {
+      'zammad/zammad-copyright': 'off',
+      'zammad/zammad-detect-translatable-string': 'off',
     },
   },
 

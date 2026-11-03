@@ -10,8 +10,11 @@ Este fichero cumple el aviso de modificaciones de la cláusula 5a de la AGPL-3.0
 
 | Última modificación | Fichero | Cambio |
 |---|---|---|
-| 2026-07-13 | `app/assets/stylesheets/zammad.scss` | Estilos del softphone flotante y del widget de llamada entrante |
-| 2026-07-06 | `app/assets/javascripts/app/controllers/cti.coffee` | Los botones de aceptar y rechazar del widget de llamada envían órdenes al softphone (`sendSoftphoneCommand`) |
+| 2026-10-30 | `app/views/layouts/application.html.erb` | Carga el entrypoint de Vite del softphone (`vite_typescript_tag 'softphone'`) |
+| 2026-10-31 | `app/assets/javascripts/app/controllers/cti.coffee` | Los botones de aceptar y rechazar del widget de llamada envían órdenes al softphone (`sendSoftphoneCommand`, `CustomEvent`) |
+| 2026-10-31 | `app/assets/stylesheets/zammad.scss` | Estilos del widget de llamada entrante |
+| 2026-10-30 | `eslint.config.ts` | Excepción de `zammad-copyright` y `zammad-detect-translatable-string` para el softphone |
+| 2026-10-30 | `package.json`, `pnpm-lock.yaml` | Dependencia `@twilio/voice-sdk` |
 | 2026-07-06 | `app/assets/javascripts/app/views/navigation/menu_cti_ringing.jst.eco` | Iconos y textos de los botones de aceptar y rechazar |
 
 ## Ficheros añadidos por Beds2B
@@ -20,9 +23,8 @@ Se distribuyen bajo AGPL-3.0 como parte de esta versión modificada de Zammad.
 
 | Añadido | Última modificación | Fichero | Contenido |
 |---|---|---|---|
-| 2026-07-06 | 2026-07-13 | `app/assets/javascripts/app/views/navigation/softphone_floating.jst.eco` | Plantilla del softphone flotante (iframe) |
-| 2026-07-06 | 2026-07-10 | `app/assets/javascripts/app/controllers/softphone.coffee` | Controlador del softphone flotante: apertura, cierre, tamaño y permisos |
-| 2026-07-08 | 2026-07-08 | `config/initializers/softphone_csp.rb` | Política de seguridad de contenido (CSP) que permite cargar el iframe del softphone |
+| 2026-10-30 | 2026-10-30 | `app/frontend/shared/addons/onedesk-softphone/` | Softphone, generado por `zammad:sync` desde `beds2b-softphone` (versión en `VERSION`) |
+| 2026-10-30 | 2026-10-30 | `app/frontend/entrypoints/softphone.ts` | Entrypoint de Vite del softphone en la interfaz clásica, generado por `zammad:sync` |
 | 2026-07-06 | 2026-07-06 | `public/assets/images/icons/call-in.svg` | Icono de aceptar llamada **[VERIFICAR origen y licencia]** |
 | 2026-07-06 | 2026-07-06 | `public/assets/images/icons/call-hang-out.svg` | Icono de colgar llamada **[VERIFICAR origen y licencia]** |
 

@@ -1,0 +1,43 @@
+/* Copyright (C) 2026 Beds2B. Generado por zammad:sync desde beds2b-softphone: no editar aquí. Se distribuye bajo AGPL-3.0 como parte de esta versión modificada de Zammad. Ver MODIFICATIONS.md. */
+
+.sp-call-strip {
+  height: 42px;
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  flex-shrink: 0;
+  background: var(--sp-color-surface-2);
+  border: 1px solid var(--sp-color-border);
+  border-radius: var(--sp-radius-field);
+}
+
+.sp-call-strip__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--sp-color-text-faint);
+}
+
+.sp-call-strip__dot--live {
+  background: var(--sp-color-status-available);
+}
+
+.sp-call-strip__peer {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.sp-call-strip__detail {
+  font-size: 14px;
+  color: var(--sp-color-text-2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}

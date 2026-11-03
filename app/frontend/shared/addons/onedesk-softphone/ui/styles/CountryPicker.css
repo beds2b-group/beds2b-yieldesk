@@ -1,0 +1,112 @@
+/* Copyright (C) 2026 Beds2B. Generado por zammad:sync desde beds2b-softphone: no editar aquí. Se distribuye bajo AGPL-3.0 como parte de esta versión modificada de Zammad. Ver MODIFICATIONS.md. */
+
+.sp-country {
+  display: flex;
+  flex-shrink: 0;
+  height: 100%;
+}
+
+.sp-country__toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+  padding: 0 6px 0 9px;
+  border: none;
+  border-right: 1px solid var(--sp-color-border);
+  border-radius: var(--sp-radius-field) 0 0 var(--sp-radius-field);
+  color: var(--sp-color-text-2);
+  background: none;
+}
+
+.sp-country__toggle:disabled {
+  opacity: 0.6;
+}
+
+.sp-country__flag {
+  display: block;
+  flex-shrink: 0;
+  width: 20px;
+  height: 14px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+/* Bajo el campo, a todo su ancho (el campo es el contenedor posicionado). */
+.sp-country__menu {
+  position: absolute;
+  top: 36px;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  overflow: hidden;
+  background: var(--sp-color-surface);
+  border: 1px solid var(--sp-color-border);
+  border-radius: var(--sp-radius-field);
+  box-shadow: var(--sp-shadow-menu);
+}
+
+.sp-country__search-field {
+  display: block;
+}
+
+.sp-country__search {
+  display: block;
+  width: 100%;
+  height: 32px;
+  padding: 0 10px;
+  border: none;
+  border-bottom: 1px solid var(--sp-color-border);
+  font-size: 13px;
+  color: var(--sp-color-text);
+  background: var(--sp-color-surface);
+}
+
+.sp-country__search::placeholder {
+  color: var(--sp-color-text-faint);
+}
+
+.sp-country__list {
+  max-height: 190px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.sp-country__option {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 7px 10px;
+  border: none;
+  font-size: 13px;
+  text-align: left;
+  color: var(--sp-color-text);
+  background: var(--sp-color-surface);
+}
+
+.sp-country__option:hover,
+.sp-country__option--current {
+  background: var(--sp-color-highlight);
+}
+
+.sp-country__name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sp-country__code {
+  color: var(--sp-color-text-muted);
+}
+
+.sp-country__empty {
+  margin: 0;
+  padding: 10px;
+  font-size: 13px;
+  color: var(--sp-color-text-muted);
+}

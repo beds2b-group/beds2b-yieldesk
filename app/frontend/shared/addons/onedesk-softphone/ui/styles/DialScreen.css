@@ -1,0 +1,40 @@
+/* Copyright (C) 2026 Beds2B. Generado por zammad:sync desde beds2b-softphone: no editar aquí. Se distribuye bajo AGPL-3.0 como parte de esta versión modificada de Zammad. Ver MODIFICATIONS.md. */
+
+.sp-dial__field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 32px;
+  margin-top: 18px;
+  border: 1px solid var(--sp-color-border);
+  border-radius: var(--sp-radius-field);
+  background: var(--sp-color-surface-2);
+}
+
+.sp-dial__number {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+}
+
+.sp-dial__input {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  padding: 0 10px;
+  border: none;
+  font-size: 14px;
+  color: var(--sp-color-text);
+  background: none;
+}
+
+.sp-dial__input::placeholder {
+  color: var(--sp-color-text-faint);
+}
+
+.sp-dial__calling {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--sp-color-text-muted);
+}

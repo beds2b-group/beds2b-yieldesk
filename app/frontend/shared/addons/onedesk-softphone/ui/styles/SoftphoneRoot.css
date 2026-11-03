@@ -1,0 +1,30 @@
+/* Copyright (C) 2026 Beds2B. Generado por zammad:sync desde beds2b-softphone: no editar aquí. Se distribuye bajo AGPL-3.0 como parte de esta versión modificada de Zammad. Ver MODIFICATIONS.md. */
+
+.sp-root {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  font-family: var(--sp-font);
+  font-size: 14px;
+  line-height: normal;
+  color: var(--sp-color-text);
+}
+
+:host([data-position='bottom-left']) .sp-root {
+  align-items: flex-start;
+}
+
+/* Tarjeta del diseño: 301 × 497. Crece hacia arriba si hay avisos, para no tapar los botones. */
+.sp-panel {
+  position: relative;
+  width: 301px;
+  min-height: 497px;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 14px 14px;
+  overflow: hidden;
+  background: var(--sp-color-surface);
+  border-radius: var(--sp-radius-panel);
+  box-shadow: var(--sp-shadow-panel);
+}

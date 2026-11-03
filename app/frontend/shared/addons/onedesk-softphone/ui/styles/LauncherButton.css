@@ -1,0 +1,50 @@
+/* Copyright (C) 2026 Beds2B. Generado por zammad:sync desde beds2b-softphone: no editar aquí. Se distribuye bajo AGPL-3.0 como parte de esta versión modificada de Zammad. Ver MODIFICATIONS.md. */
+
+/* Botón flotante del softphone actual (inventario §3.3). */
+.sp-launcher {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: var(--sp-color-success);
+  box-shadow: 0 6px 14px rgba(56, 161, 105, 0.35);
+}
+
+.sp-launcher:hover {
+  background: var(--sp-color-success-hover);
+}
+
+.sp-launcher__dot {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 13px;
+  height: 13px;
+  border: 2px solid #fff;
+}
+
+.sp-launcher--ringing {
+  animation: sp-launcher-ring 1s ease-in-out infinite;
+}
+
+@keyframes sp-launcher-ring {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(56, 161, 105, 0.55);
+  }
+
+  50% {
+    box-shadow: 0 0 0 12px rgba(56, 161, 105, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sp-launcher--ringing {
+    animation: none;
+  }
+}

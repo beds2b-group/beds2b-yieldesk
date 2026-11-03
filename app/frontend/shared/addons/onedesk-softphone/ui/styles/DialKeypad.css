@@ -1,0 +1,27 @@
+/* Copyright (C) 2026 Beds2B. Generado por zammad:sync desde beds2b-softphone: no editar aquí. Se distribuye bajo AGPL-3.0 como parte de esta versión modificada de Zammad. Ver MODIFICATIONS.md. */
+
+.sp-keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 80px);
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.sp-keypad__key {
+  height: 42px;
+  border: none;
+  border-radius: var(--sp-radius-button);
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--sp-color-text);
+  background: var(--sp-color-surface-2);
+}
+
+.sp-keypad__key:not(:disabled):hover {
+  background: #e8ecf0;
+}
+
+.sp-keypad__key:not(:disabled):active {
+  background: var(--sp-color-surface-active);
+}

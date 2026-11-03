@@ -1,0 +1,30 @@
+/* Copyright (C) 2026 Beds2B. Generado por zammad:sync desde beds2b-softphone: no editar aquí. Se distribuye bajo AGPL-3.0 como parte de esta versión modificada de Zammad. Ver MODIFICATIONS.md. */
+
+.sp-confirm {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.sp-confirm__text {
+  font-size: 15px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.sp-confirm__buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+
+.sp-confirm__buttons .sp-button {
+  height: 44px;
+  font-size: 13px;
+}

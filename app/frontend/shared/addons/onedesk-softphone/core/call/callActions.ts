@@ -1,0 +1,58 @@
+// Copyright (C) 2026 Beds2B. Generado por zammad:sync desde beds2b-softphone: no editar aquí.
+// Se distribuye bajo AGPL-3.0 como parte de esta versión modificada de Zammad. Ver MODIFICATIONS.md.
+
+import { canStartCall, type RegistrationState } from '../registration/registrationMachine.ts'
+
+import type { CallState } from './callMachine.ts'
+
+export type CallAction =
+  | 'dial'
+  | 'redial'
+  | 'answer'
+  | 'reject'
+  | 'hangup'
+  | 'mute'
+  | 'dtmf'
+  | 'transfer'
+
+export interface CallActionContext {
+  call: CallState
+  registration: RegistrationState
+  // Hay un número anterior para rellamar (solo en memoria, architecture.md §8.2).
+  hasLastDialed: boolean
+  // Hay una transferencia pedida y sin contestar: no se pide otra (DECISIONES.md, núcleo #3).
+  transferPending: boolean
+}
+
+const NO_ACTIONS: ReadonlySet<CallAction> = new Set()
+
+// Acciones que la interfaz habilita en cada estado (architecture.md §5.4, prompt §7.3). Es la única
+// fuente: un botón que no está aquí se muestra deshabilitado. Así se evita, por ejemplo, el Mute
+// activo sin llamada del softphone actual (ADR-006).
+export const availableCallActions = ({
+  call,
+  registration,
+  hasLastDialed,
+  transferPending,
+}: CallActionContext): ReadonlySet<CallAction> => {
+  switch (call.status) {
+    case 'idle':
+      if (!canStartCall(registration)) return NO_ACTIONS
+      return new Set<CallAction>(hasLastDialed ? ['dial', 'redial'] : ['dial'])
+    case 'incoming':
+      // También se transfiere mientras suena (DECISIONES.md, núcleo #4). Con la transferencia pedida
+      // ya no se contesta: One-Desk cancela el tramo de este agente.
+      if (transferPending) return new Set<CallAction>(['reject'])
+      return new Set<CallAction>(['answer', 'reject', 'transfer'])
+    case 'outgoing':
+      return new Set<CallAction>(['hangup'])
+    case 'in-call':
+      return new Set<CallAction>(
+        transferPending ? ['hangup', 'mute', 'dtmf'] : ['hangup', 'mute', 'dtmf', 'transfer'],
+      )
+    case 'ending':
+      return NO_ACTIONS
+    default:
+      return call satisfies never
+  }
+}
