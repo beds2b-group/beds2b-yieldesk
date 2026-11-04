@@ -6,6 +6,7 @@ import { HtmlAudioSoundPlayer } from '../../adapters/sounds/HtmlAudioSoundPlayer
 
 import { createPageEngine } from './createPageEngine.ts'
 import { createProviderFactory } from './createProviderFactory.ts'
+import { createOneDeskRealtimeChannel } from './createRealtimeChannel.ts'
 import { mountSoftphone, type MountedSoftphone } from './mountSoftphone.ts'
 import { SOUND_URLS } from './soundUrls.ts'
 
@@ -42,6 +43,7 @@ export const mountOneDeskSoftphone = ({
         sounds,
         host,
         backend: new OneDeskBackend({ apiBase: config.apiBase, fetch: window.fetch.bind(window) }),
+        realtime: createOneDeskRealtimeChannel(config.apiBase, logger),
         createProvider: createProviderFactory(config),
       }),
   })

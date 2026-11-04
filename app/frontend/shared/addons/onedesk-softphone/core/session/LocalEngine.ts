@@ -6,6 +6,7 @@ import { IDLE_CALL } from '../call/callMachine.ts'
 import { CallController } from './CallController.ts'
 import { EngineState } from './EngineState.ts'
 import { ProviderHandle } from './ProviderHandle.ts'
+import { RealtimeController } from './RealtimeController.ts'
 import { RegistrationController } from './RegistrationController.ts'
 import { SessionController } from './SessionController.ts'
 import { SettingsPersistence } from './SettingsPersistence.ts'
@@ -20,6 +21,7 @@ import type { Listener, Unsubscribe } from '../ports/events.ts'
 import type { KeyValueStore } from '../ports/KeyValueStore.ts'
 import type { Logger } from '../ports/Logger.ts'
 import type { Notifier } from '../ports/Notifier.ts'
+import type { RealtimeChannel } from '../ports/RealtimeChannel.ts'
 import type { SoundPlayer } from '../ports/SoundPlayer.ts'
 import type { TelephonyProvider } from '../ports/TelephonyProvider.ts'
 
@@ -27,6 +29,8 @@ export interface LocalEngineDependencies {
   // Carga el SDK con import() la primera vez que hace falta (architecture.md §8.5).
   createProvider: () => Promise<TelephonyProvider>
   backend: BackendApi
+  // Hub de One-Desk: sin él, One-Desk da el teléfono por cerrado y no le ofrece llamadas.
+  realtime: RealtimeChannel
   tabs: EngineTabCoordinator
   sounds: SoundPlayer
   notifier: Notifier
@@ -54,6 +58,7 @@ export class LocalEngine implements SoftphoneEngine {
   private readonly session: SessionController
   private readonly registration: RegistrationController
   private readonly calls: CallController
+  private readonly realtime: RealtimeController
   private readonly subscriptions: Unsubscribe[] = []
 
   constructor(deps: LocalEngineDependencies) {
@@ -65,10 +70,14 @@ export class LocalEngine implements SoftphoneEngine {
       state: this.state,
       provider: this.provider,
     })
+    this.realtime = new RealtimeController({ ...deps, state: this.state })
     this.session = new SessionController({
       ...deps,
       state: this.state,
-      onActive: () => this.registration.register(),
+      onActive: () => {
+        this.realtime.start()
+        this.registration.register()
+      },
     })
     this.calls = new CallController({ ...deps, state: this.state, provider: this.provider })
 
@@ -151,7 +160,7 @@ export class LocalEngine implements SoftphoneEngine {
     for (const unsubscribe of this.subscriptions.splice(0)) unsubscribe()
     this.session.dispose()
     this.calls.endActiveCall()
-    await this.registration.unregister()
+    await Promise.all([this.registration.unregister(), this.realtime.dispose()])
     this.provider.destroy()
     this.state.clear()
   }
@@ -162,8 +171,12 @@ export class LocalEngine implements SoftphoneEngine {
     if (this.state.snapshot.session.status === 'signed-out') return
 
     this.calls.endActiveCall()
+    // El cierre del canal empieza ya, para que no reconecte (One-Desk pasaría el agente de `offline`
+    // a `paused`), pero no retrasa la baja de la sesión: una respuesta suya podría colarse.
+    const closingRealtime = this.realtime.stop()
     await this.registration.unregister()
     await this.session.signOut()
+    await closingRealtime
     // Ya sin registro no llegará el aviso de fin de la llamada que se acaba de colgar.
     this.state.patch({ call: IDLE_CALL, pendingTransfer: null, error: null })
   }

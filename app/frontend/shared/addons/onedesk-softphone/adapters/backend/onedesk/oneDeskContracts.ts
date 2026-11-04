@@ -12,6 +12,7 @@ import type {
   StatusChange,
 } from '../../../core/agent/agentStatus.ts'
 import type { AgentDetails, AgentSummary } from '../../../core/ports/BackendApi.ts'
+import type { AgentStatusChange } from '../../../core/ports/RealtimeChannel.ts'
 
 // Frontera con los contratos de One-Desk (ENDPOINTS_MVP.md): el JSON de One-Desk no sale de este
 // fichero. Una respuesta que no cumple el contrato falla con `backend`, sin datos del agente.
@@ -151,3 +152,11 @@ export const statusChangeBody = (change: StatusChange): Json =>
   change.status === 'paused'
     ? { status: 'paused', pauseReasonId: change.pauseReasonId }
     : { status: change.status }
+
+// Evento agent.status_changed del hub (AgentStatusChangedMessage de One-Desk): el mismo estado que el
+// endpoint 9, con el agente al que se refiere.
+export const readAgentStatusChange = (value: unknown): AgentStatusChange => {
+  const operation = 'agent.status_changed'
+  const body = object(operation, value)
+  return { agentId: integer(operation, body, 'agentId'), presence: readPresence(operation, body) }
+}

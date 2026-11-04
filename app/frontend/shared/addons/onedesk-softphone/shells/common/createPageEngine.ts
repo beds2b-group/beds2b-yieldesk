@@ -13,6 +13,7 @@ import type { UiConfig } from '../../config/SoftphoneConfig.ts'
 import type { BackendApi } from '../../core/ports/BackendApi.ts'
 import type { HostBridge } from '../../core/ports/HostBridge.ts'
 import type { Logger } from '../../core/ports/Logger.ts'
+import type { RealtimeChannel } from '../../core/ports/RealtimeChannel.ts'
 import type { SoundPlayer } from '../../core/ports/SoundPlayer.ts'
 import type { TelephonyProvider } from '../../core/ports/TelephonyProvider.ts'
 import type { EngineTabCoordinator, SoftphoneEngine } from '../../core/session/SoftphoneEngine.ts'
@@ -25,6 +26,7 @@ export interface PageEngineOptions {
   // Lo que cambia entre shells: el anfitrión, el servidor y el proveedor de voz.
   host: HostBridge
   backend: BackendApi
+  realtime: RealtimeChannel
   createProvider: () => Promise<TelephonyProvider>
   // Una sola pestaña, sin réplicas: para desarrollar sin que otra pestaña se quede la líder.
   singleTab?: boolean
@@ -51,11 +53,12 @@ const createTabs = async ({
 // Raíz de composición común a las shells (architecture.md §5.4): conecta los adaptadores del
 // navegador y deja a cada shell solo lo suyo.
 export const createPageEngine = async (options: PageEngineOptions): Promise<SoftphoneEngine> => {
-  const { window, ui, logger, sounds, host, backend, createProvider } = options
+  const { window, ui, logger, sounds, host, backend, realtime, createProvider } = options
   const t = createTranslate(ui.language)
   return createSoftphoneEngine({
     createProvider,
     backend,
+    realtime,
     host,
     tabs: await createTabs(options),
     sounds,

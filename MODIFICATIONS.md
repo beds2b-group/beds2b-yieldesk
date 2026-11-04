@@ -14,7 +14,7 @@ Este fichero cumple el aviso de modificaciones de la cláusula 5a de la AGPL-3.0
 | 2026-10-31 | `app/assets/javascripts/app/controllers/cti.coffee` | Los botones de aceptar y rechazar del widget de llamada envían órdenes al softphone (`sendSoftphoneCommand`, `CustomEvent`) |
 | 2026-10-31 | `app/assets/stylesheets/zammad.scss` | Estilos del widget de llamada entrante |
 | 2026-10-30 | `eslint.config.ts` | Excepción de `zammad-copyright` y `zammad-detect-translatable-string` para el softphone |
-| 2026-10-30 | `package.json`, `pnpm-lock.yaml` | Dependencia `@twilio/voice-sdk` |
+| 2026-11-04 | `package.json`, `pnpm-lock.yaml` | Dependencias `@twilio/voice-sdk` y `@microsoft/signalr` |
 | 2026-07-06 | `app/assets/javascripts/app/views/navigation/menu_cti_ringing.jst.eco` | Iconos y textos de los botones de aceptar y rechazar |
 
 ## Ficheros añadidos por Beds2B
