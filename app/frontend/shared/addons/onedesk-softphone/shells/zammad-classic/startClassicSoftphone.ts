@@ -1,8 +1,10 @@
 // Copyright (C) 2026 Beds2B. Generado por zammad:sync desde beds2b-softphone: no editar aquí.
 // Se distribuye bajo AGPL-3.0 como parte de esta versión modificada de Zammad. Ver MODIFICATIONS.md.
 
+import { HOST_COMMAND_EVENT } from '../../adapters/host/hostCommandEvent.ts'
 import { ZammadHostBridge } from '../../adapters/host/zammad/ZammadHostBridge.ts'
 import { ConsoleLogger } from '../../adapters/logging/ConsoleLogger.ts'
+import { createTranslate } from '../../ui/i18n/translate.ts'
 import { AgentSessionMount } from '../common/agentSessionMount.ts'
 import { loadConfig } from '../common/loadConfig.ts'
 import {
@@ -11,6 +13,7 @@ import {
 } from '../common/mountOneDeskSoftphone.ts'
 
 import { readClassicAgent, type ClassicApp, type ClassicWindow } from './classicZammad.ts'
+import { decorateCtiWidget } from './ctiWidgetDecorator.ts'
 
 import type { MountedSoftphone } from '../common/mountSoftphone.ts'
 
@@ -63,7 +66,25 @@ export const startClassicSoftphone = ({
       commandTarget: window,
       logger,
     })
-    return mount({ window, config, host, logger })
+    const mounted = await mount({ window, config, host, logger })
+    if (mounted === null) return null
+    // Los botones del widget CTI dan la orden por el mismo evento que escucha el anfitrión.
+    const t = createTranslate(config.ui.language)
+    const stopDecorating = decorateCtiWidget({
+      document: window.document,
+      labels: { answer: t('incoming.answer'), reject: t('incoming.reject') },
+      send: (command) => {
+        window.dispatchEvent(new CustomEvent(HOST_COMMAND_EVENT, { detail: { command } }))
+      },
+    })
+    return {
+      element: mounted.element,
+      engine: mounted.engine,
+      unmount: async () => {
+        stopDecorating()
+        await mounted.unmount()
+      },
+    }
   }
 
   const session = new AgentSessionMount({ mount: mountForAgent, logger: bootLogger })

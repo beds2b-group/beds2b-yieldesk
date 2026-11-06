@@ -1,9 +1,3 @@
-# Modificado por Beds2B el 2026-07-06: botones de aceptar y rechazar del widget
-# de llamada conectados al softphone (sendSoftphoneCommand). Última modificación
-# el 2026-10-31: las órdenes van solo al softphone nuevo (CustomEvent); el iframe
-# se ha retirado.
-# Lista completa de cambios sobre Zammad en MODIFICATIONS.md.
-
 class App.CTI extends App.Controller
   @extend App.PopoverProvidable
   @registerPopovers 'User'
@@ -58,12 +52,6 @@ class App.CTI extends App.Controller
         if user_id
           user = App.User.find(user_id)
         @newTicket(user)
-      )
-      $('.call-widget').find('.js-acceptCall').on('click', =>
-        @sendSoftphoneCommand('answer-call')
-      )
-      $('.call-widget').find('.js-rejectCall').on('click', =>
-        @sendSoftphoneCommand('reject-call')
       )
     )
     @controllerBind('auth', (data) =>
@@ -247,12 +235,6 @@ class App.CTI extends App.Controller
       #container: @el.closest('.content')
       callback: @ticketNew
     )
-  
-  acceptCall: (user) =>
-    if user
-      @navigate("ticket/create/customer/#{user.id}")
-      return
-    @navigate('ticket/create')
 
   ticketNew: (customer) ->
     @navigate "#ticket/create/customer/#{customer.id}"
@@ -294,12 +276,6 @@ class App.CTI extends App.Controller
 
   currentPosition: =>
     @$('.main').scrollTop()
-
-  sendSoftphoneCommand: (action) ->
-    # Softphone nuevo (beds2b-softphone): orden por CustomEvent en la misma página.
-    command = { 'answer-call': 'answer', 'reject-call': 'reject' }[action]
-    if command
-      window.dispatchEvent(new CustomEvent('onedesk-softphone:command', detail: { command: command }))
 
 class WidgetAvatar extends App.ControllerObserver
   @extend App.PopoverProvidable

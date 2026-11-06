@@ -1,0 +1,45 @@
+/* Copyright (C) 2026 Beds2B. Generado por zammad:sync desde beds2b-softphone: no editar aquí. Se distribuye bajo AGPL-3.0 como parte de esta versión modificada de Zammad. Ver MODIFICATIONS.md. */
+
+/* Botones del aviso de llamada del widget CTI de la interfaz clásica, en la raíz del Shadow DOM de
+   <onedesk-cti-actions> (shells/zammad-classic/ctiCallActions.ts). Mismos colores que la pantalla de
+   llamada entrante del teléfono. */
+:host {
+  all: initial;
+  display: flex;
+  justify-content: space-around;
+  gap: 12px;
+  padding: 8px 0 4px;
+}
+
+.sp-cti-actions__button {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+}
+
+.sp-cti-actions__button--answer {
+  background: #38a169;
+}
+
+.sp-cti-actions__button--answer:hover {
+  background: #2f8f5b;
+}
+
+.sp-cti-actions__button--reject {
+  background: #e05252;
+}
+
+.sp-cti-actions__button--reject:hover {
+  background: #cf4444;
+}
+
+.sp-cti-actions__button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #1f2933;
+}
