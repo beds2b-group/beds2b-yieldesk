@@ -1,6 +1,0 @@
-.env
-tests.py
-__pycache__/
-*.pyc
-.idea/
-.venv/

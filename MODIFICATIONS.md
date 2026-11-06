@@ -34,9 +34,3 @@ Se modificaron en algún momento y hoy son idénticos a los de Zammad. Se dejan 
 | 2026-11-06 | `app/assets/javascripts/app/controllers/cti.coffee`, `app/assets/javascripts/app/views/navigation/menu_cti_ringing.jst.eco`, `app/assets/stylesheets/zammad.scss` | Los botones de contestar y rechazar del widget de llamada los añade ahora el softphone, sin tocar Zammad. El cambio de `zammad.scss` también quitaba el margen entre botones en todo Zammad |
 | 2026-11-06 | `public/assets/images/icons/call-in.svg`, `public/assets/images/icons/call-hang-out.svg` | Borrados: el softphone usa sus propios iconos. Su origen y su licencia no estaban verificados |
 | 2026-11-06 | `.gitattributes`, `.devcontainer/default/devcontainer-lock.json`, `.devcontainer/features/add-bin-path/install.sh`, `.devcontainer/features/zammad-deps/install.sh` | Cambios accidentales de un rebase del 2026-07-06: un conflicto sin resolver, un lock antiguo, un BOM delante del shebang y `eol=lf` para todo el repositorio |
-
-## Contenido que no forma parte de Zammad
-
-| Ruta | Qué es |
-|---|---|
-| `ChatbotDispo/` | Chatbot de disponibilidad en Python. Es un programa independiente que solo comparte repositorio; está previsto sacarlo a su propio repositorio |
