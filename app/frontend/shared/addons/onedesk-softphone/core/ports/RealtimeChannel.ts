@@ -4,6 +4,7 @@
 import type { Subscribable } from './events.ts'
 import type { SoftphoneError } from './SoftphoneError.ts'
 import type { AgentPresence } from '../agent/agentStatus.ts'
+import type { SupervisionCallUpdate } from '../supervision/supervisionOverview.ts'
 
 // Cambio de estado de un agente, propio o de un compañero.
 export interface AgentStatusChange {
@@ -11,8 +12,23 @@ export interface AgentStatusChange {
   presence: AgentPresence
 }
 
+// Aviso `call.offered`: One-Desk va a llamar a este teléfono. `legCallSid` es el CallSid de esa
+// llamada en el proveedor. `assignment` (P1) y `transfer` (endpoint 12) suenan como siempre; `monitor`
+// (endpoint 14) la contesta el teléfono solo.
+export interface CallOffer {
+  callId: string
+  legCallSid: string
+  kind: 'assignment' | 'transfer' | 'monitor'
+  customerNumber: string
+}
+
 export interface RealtimeEventMap {
   agentStatusChanged: AgentStatusChange
+  callOffered: CallOffer
+  // Solo llega a `supervisor` y `admin` (grupo `supervisors` del hub).
+  supervisionCallUpdated: SupervisionCallUpdate
+  // El adaptador ha recuperado solo una conexión que se había cortado.
+  reconnected: undefined
   // La conexión se ha perdido y el adaptador ya no la recupera solo. Llega con el fallo, si lo hay.
   closed: SoftphoneError | null
 }

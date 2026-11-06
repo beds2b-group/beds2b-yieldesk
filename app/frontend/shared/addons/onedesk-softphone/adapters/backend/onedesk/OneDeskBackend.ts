@@ -10,6 +10,7 @@ import {
   readCurrentCallId,
   readHeldAt,
   readPresence,
+  readSupervisionOverview,
   readVoiceToken,
   statusChangeBody,
 } from './oneDeskContracts.ts'
@@ -17,9 +18,10 @@ import {
 import type { AgentPresence, StatusChange } from '../../../core/agent/agentStatus.ts'
 import type { TransferTarget } from '../../../core/call/transferTarget.ts'
 import type { AgentDetails, AgentSummary, BackendApi } from '../../../core/ports/BackendApi.ts'
+import type { SupervisionOverview } from '../../../core/supervision/supervisionOverview.ts'
 
-// Rutas de One-Desk (ENDPOINTS_MVP.md), relativas a `apiBase` (/onedesk, ADR-012). Las de
-// supervisión y grabaciones se usarán con la pantalla de supervisión.
+// Rutas de One-Desk (ENDPOINTS_MVP.md), relativas a `apiBase` (/onedesk, ADR-012). La de
+// grabaciones queda para después del MVP.
 export const ONE_DESK_ROUTES = {
   session: '/api/session',
   voiceToken: '/api/session/voice-token',
@@ -48,7 +50,7 @@ export interface OneDeskBackendOptions {
 interface Call {
   operation: string
   path: string
-  method?: 'GET' | 'POST' | 'PUT'
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
   body?: unknown
 }
 
@@ -132,6 +134,32 @@ export class OneDeskBackend implements BackendApi {
       operation: 'resume',
       path: ONE_DESK_ROUTES.resume(callId),
       method: 'PUT',
+    })
+  }
+
+  // Endpoint 13.
+  async getSupervisionOverview(): Promise<SupervisionOverview> {
+    return readSupervisionOverview(
+      await this.withSession({ operation: 'supervision', path: ONE_DESK_ROUTES.supervision }),
+    )
+  }
+
+  // Endpoint 14. En el MVP solo se escucha (one-desk DECISIONES.md, Supervisión #3).
+  async startMonitoring(callId: string): Promise<void> {
+    await this.withSession({
+      operation: 'monitor',
+      path: ONE_DESK_ROUTES.monitor(callId),
+      method: 'POST',
+      body: { mode: 'listen' },
+    })
+  }
+
+  // Endpoint 16.
+  async stopMonitoring(callId: string): Promise<void> {
+    await this.withSession({
+      operation: 'monitor',
+      path: ONE_DESK_ROUTES.monitor(callId),
+      method: 'DELETE',
     })
   }
 

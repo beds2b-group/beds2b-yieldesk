@@ -18,6 +18,9 @@ export interface RealtimeControllerDependencies {
   backend: BackendApi
   clock: Clock
   logger: Logger
+  // Cada vez que el canal conecta (también tras una caída): lo que pasó mientras tanto no llega por
+  // el hub y hay que volver a leerlo (por ejemplo, la vista de supervisión).
+  onConnected?: () => void
 }
 
 // Canal en tiempo real de la pestaña líder (ENDPOINTS_MVP.md §18): se abre con la sesión, se
@@ -40,6 +43,9 @@ export class RealtimeController {
     this.subscriptions = [
       deps.realtime.on('agentStatusChanged', (change) => this.handleStatusChange(change)),
       deps.realtime.on('closed', (error) => this.handleClosed(error?.code ?? null)),
+      deps.realtime.on('reconnected', () => {
+        if (this.running) this.deps.onConnected?.()
+      }),
     ]
   }
 
@@ -81,6 +87,7 @@ export class RealtimeController {
         return
       }
       this.deps.logger.info('Realtime channel connected', { attempt })
+      this.deps.onConnected?.()
     } catch (error) {
       if (cycle === this.cycle) this.retry(asSoftphoneError(error, 'network').code, cycle, attempt)
     }

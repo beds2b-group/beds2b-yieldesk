@@ -8,12 +8,14 @@ import type { DtmfDigit } from '../call/dtmf.ts'
 // Proveedores de voz soportados (ADR-004). Cada instalación usa uno, elegido en config.json.
 export type ProviderId = 'twilio' | 'infobip'
 
-// Eventos neutros que cualquier SDK tiene que traducir. El identificador de la llamada no viaja en
-// los eventos: se lee de `callSid` cuando hace falta (por ejemplo, para transferir).
+// Eventos neutros que cualquier SDK tiene que traducir. El identificador de la llamada en curso no
+// viaja en los eventos: se lee de `callSid` cuando hace falta (por ejemplo, para transferir). La
+// entrante sí lleva el suyo, si el proveedor lo da: con él se reconoce la llamada de escucha del
+// supervisor (`call.offered`, endpoint 14).
 export interface TelephonyEventMap {
   registered: undefined
   unregistered: undefined
-  incoming: { from: string }
+  incoming: { from: string; callSid?: string | null }
   ringing: undefined
   accepted: undefined
   disconnected: undefined

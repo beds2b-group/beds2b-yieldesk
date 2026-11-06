@@ -188,7 +188,10 @@ export class TwilioProvider implements TelephonyProvider {
   private handleIncoming(call: TwilioCall): void {
     this.calls.addIncoming(call)
     this.listenToCall(call)
-    this.events.emit('incoming', { from: call.parameters.From ?? '' })
+    this.events.emit('incoming', {
+      from: call.parameters.From ?? '',
+      callSid: call.parameters.CallSid ?? null,
+    })
   }
 
   // La llamada en curso termina con `disconnected`; la entrante que sonaba, con `cancelled`. Las que

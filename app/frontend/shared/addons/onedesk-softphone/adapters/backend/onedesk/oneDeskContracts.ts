@@ -12,7 +12,14 @@ import type {
   StatusChange,
 } from '../../../core/agent/agentStatus.ts'
 import type { AgentDetails, AgentSummary } from '../../../core/ports/BackendApi.ts'
-import type { AgentStatusChange } from '../../../core/ports/RealtimeChannel.ts'
+import type { AgentStatusChange, CallOffer } from '../../../core/ports/RealtimeChannel.ts'
+import type {
+  ActiveCall,
+  SupervisedAgent,
+  SupervisionCallUpdate,
+  SupervisionOverview,
+  WaitingCall,
+} from '../../../core/supervision/supervisionOverview.ts'
 
 // Frontera con los contratos de One-Desk (ENDPOINTS_MVP.md): el JSON de One-Desk no sale de este
 // fichero. Una respuesta que no cumple el contrato falla con `backend`, sin datos del agente.
@@ -160,6 +167,106 @@ export const statusChangeBody = (change: StatusChange): Json =>
   change.status === 'paused'
     ? { status: 'paused', pauseReasonId: change.pauseReasonId }
     : { status: change.status }
+
+// Supervisión (endpoint 13 y `supervision.call_updated`). Cada objeto, como SupervisionOverviewResponse
+// de One-Desk.
+
+const array = (operation: string, body: Json, field: string): readonly unknown[] => {
+  const value = body[field] ?? []
+  if (Array.isArray(value)) return value
+  throw invalid(operation, field)
+}
+
+const readSupervisedAgent = (operation: string, value: unknown): SupervisedAgent => {
+  const body = object(operation, value, 'agents')
+  return {
+    id: integer(operation, body, 'id'),
+    fullName: string(operation, body, 'fullName'),
+    extension: string(operation, body, 'extension'),
+    status: status(operation, body),
+    pauseReason: optionalString(operation, body, 'pauseReason'),
+    since: optionalInstant(body, 'statusChangedAt'),
+    currentCallId: optionalString(operation, body, 'currentCallId'),
+  }
+}
+
+const readActiveCall = (operation: string, value: unknown): ActiveCall => {
+  const body = object(operation, value, 'activeCalls')
+  const agent =
+    body.agent === null || body.agent === undefined ? null : object(operation, body.agent, 'agent')
+  return {
+    id: string(operation, body, 'id'),
+    direction: body.direction === 'outbound' ? 'outbound' : 'inbound',
+    customerNumber: string(operation, body, 'customerNumber'),
+    answeredAt: optionalInstant(body, 'answeredAt'),
+    heldAt: optionalInstant(body, 'heldAt'),
+    agent:
+      agent === null
+        ? null
+        : { id: integer(operation, agent, 'id'), fullName: string(operation, agent, 'fullName') },
+    monitoredBy: array(operation, body, 'monitoredBy').map((supervisor) =>
+      integer(operation, object(operation, supervisor, 'monitoredBy'), 'agentId'),
+    ),
+    hasRecording: body.hasRecording === true,
+  }
+}
+
+const readWaitingCall = (operation: string, value: unknown): WaitingCall => {
+  const body = object(operation, value, 'waitingCalls')
+  return {
+    id: string(operation, body, 'id'),
+    customerNumber: string(operation, body, 'customerNumber'),
+    receivedAt: optionalInstant(body, 'receivedAt'),
+  }
+}
+
+// Endpoint 13.
+export const readSupervisionOverview = (value: unknown): SupervisionOverview => {
+  const operation = 'supervision'
+  const body = object(operation, value)
+  return {
+    agents: array(operation, body, 'agents').map((agent) => readSupervisedAgent(operation, agent)),
+    activeCalls: array(operation, body, 'activeCalls').map((call) =>
+      readActiveCall(operation, call),
+    ),
+    waitingCalls: array(operation, body, 'waitingCalls').map((call) =>
+      readWaitingCall(operation, call),
+    ),
+  }
+}
+
+// Evento supervision.call_updated del hub (SupervisionCallUpdatedMessage de One-Desk).
+export const readSupervisionCallUpdate = (value: unknown): SupervisionCallUpdate => {
+  const operation = 'supervision.call_updated'
+  const body = object(operation, value)
+  const callId = string(operation, body, 'callId')
+  switch (body.state) {
+    case 'waiting':
+      return { callId, state: 'waiting', call: readWaitingCall(operation, body.call) }
+    case 'active':
+      return { callId, state: 'active', call: readActiveCall(operation, body.call) }
+    case 'ended':
+      return { callId, state: 'ended' }
+    default:
+      throw invalid(operation, 'state')
+  }
+}
+
+const OFFER_KINDS: readonly CallOffer['kind'][] = ['assignment', 'transfer', 'monitor']
+
+// Evento call.offered del hub (CallOfferedMessage de One-Desk).
+export const readCallOffer = (value: unknown): CallOffer => {
+  const operation = 'call.offered'
+  const body = object(operation, value)
+  const kind = string(operation, body, 'kind')
+  if (!(OFFER_KINDS as readonly string[]).includes(kind)) throw invalid(operation, 'kind')
+  return {
+    callId: string(operation, body, 'callId'),
+    legCallSid: string(operation, body, 'legCallSid'),
+    kind: kind as CallOffer['kind'],
+    customerNumber: string(operation, body, 'customerNumber'),
+  }
+}
 
 // Evento agent.status_changed del hub (AgentStatusChangedMessage de One-Desk): el mismo estado que el
 // endpoint 9, con el agente al que se refiere.

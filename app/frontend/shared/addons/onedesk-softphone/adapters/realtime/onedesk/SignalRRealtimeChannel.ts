@@ -3,17 +3,31 @@
 
 import { EventEmitter, type Listener, type Unsubscribe } from '../../../core/ports/events.ts'
 import { SoftphoneError, type SoftphoneErrorCode } from '../../../core/ports/SoftphoneError.ts'
-import { readAgentStatusChange } from '../../backend/onedesk/oneDeskContracts.ts'
+import {
+  readAgentStatusChange,
+  readCallOffer,
+  readSupervisionCallUpdate,
+} from '../../backend/onedesk/oneDeskContracts.ts'
 
 import type { CreateHubConnection, HubConnection } from './signalrSdk.ts'
 import type { Logger } from '../../../core/ports/Logger.ts'
 import type { RealtimeChannel, RealtimeEventMap } from '../../../core/ports/RealtimeChannel.ts'
 
-// Nombres de los eventos del hub (EventsHubContract de One-Desk). De momento solo se atiende el
-// estado de los agentes; los de llamada y transferencia llegarán con sus pantallas.
+// Nombres de los eventos del hub (EventsHubContract de One-Desk) que atiende el teléfono, con su
+// lectura. Los demás (`call.answered`, `transfer.*`…) llegarán cuando una pantalla los necesite.
 export const HUB_EVENTS = {
   agentStatusChanged: 'agent.status_changed',
+  callOffered: 'call.offered',
+  supervisionCallUpdated: 'supervision.call_updated',
 } as const
+
+type HubEvent = keyof typeof HUB_EVENTS
+
+const READERS: { [TEvent in HubEvent]: (message: unknown) => RealtimeEventMap[TEvent] } = {
+  agentStatusChanged: readAgentStatusChange,
+  callOffered: readCallOffer,
+  supervisionCallUpdated: readSupervisionCallUpdate,
+}
 
 export interface SignalRRealtimeChannelOptions {
   // URL del hub detrás del proxy, por ejemplo /onedesk/hubs/events.
@@ -87,21 +101,31 @@ export class SignalRRealtimeChannel implements RealtimeChannel {
     return this.connection
   }
 
-  private listenTo(connection: HubConnection): HubConnection {
-    const { logger } = this.options
-    connection.on(HUB_EVENTS.agentStatusChanged, (message: unknown) => {
+  private forward<TEvent extends HubEvent>(connection: HubConnection, event: TEvent): void {
+    connection.on(HUB_EVENTS[event], (message: unknown) => {
+      let payload: RealtimeEventMap[TEvent]
       try {
-        this.events.emit('agentStatusChanged', readAgentStatusChange(message))
+        payload = READERS[event](message)
       } catch (error) {
         // Un mensaje que no cumple el contrato se ignora: no debe tumbar la conexión.
-        logger.warn('Ignored realtime message', {
-          event: HUB_EVENTS.agentStatusChanged,
+        this.options.logger.warn('Ignored realtime message', {
+          event: HUB_EVENTS[event],
           reason: error instanceof Error ? error.message : 'unknown',
         })
+        return
       }
+      this.events.emit(event, payload)
     })
+  }
+
+  private listenTo(connection: HubConnection): HubConnection {
+    const { logger } = this.options
+    for (const event of Object.keys(HUB_EVENTS) as HubEvent[]) this.forward(connection, event)
     connection.onreconnecting(() => logger.warn('Realtime channel reconnecting'))
-    connection.onreconnected(() => logger.info('Realtime channel reconnected'))
+    connection.onreconnected(() => {
+      logger.info('Realtime channel reconnected')
+      this.events.emit('reconnected', undefined)
+    })
     connection.onclose((error) => {
       this.events.emit(
         'closed',

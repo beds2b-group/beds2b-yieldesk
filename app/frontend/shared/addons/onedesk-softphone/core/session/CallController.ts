@@ -130,10 +130,39 @@ export class CallController {
     await this.changeHold(false)
   }
 
+  // Supervisión. La llamada de escucha la contesta el teléfono solo, sin timbre ni aviso
+  // (endpoint 14): la reconoce SupervisionController por su CallSid.
+  answerMonitor(monitored: { callId: string; customer: string; agentName: string | null }): void {
+    if (this.deps.state.snapshot.call.status !== 'idle') return
+    this.deps.provider.current()?.answer()
+    this.apply({ type: 'monitor-answered', ...monitored, at: this.deps.clock.now() })
+  }
+
+  // Salir de la escucha: One-Desk saca al supervisor de la conferencia (endpoint 16) y el proveedor
+  // suelta la línea. Si One-Desk no responde, se cuelga desde aquí, que tiene el mismo efecto.
+  async leaveMonitoring(stop: (callId: string) => Promise<void>): Promise<void> {
+    const { call } = this.deps.state.snapshot
+    if (call.status !== 'monitoring' || !this.allows('stop-monitoring')) return
+    this.apply({ type: 'hangup' })
+    try {
+      await stop(call.callId)
+    } catch (error) {
+      this.deps.logger.warn('Stop monitoring failed, hanging up', {
+        code: asSoftphoneError(error, 'backend').code,
+      })
+      this.deps.provider.current()?.hangup()
+    }
+  }
+
   // Termina lo que haya en curso antes de Salir o de desmontar el teléfono (architecture.md §8.3).
   endActiveCall(): void {
     if (this.allows('reject')) this.reject()
     else if (this.allows('hangup')) this.hangup()
+    else if (this.deps.state.snapshot.call.status === 'monitoring') {
+      // Al colgar, One-Desk devuelve al supervisor a su estado anterior (endpoints 14 y 16 #5).
+      this.deps.provider.current()?.hangup()
+      this.apply({ type: 'hangup' })
+    }
   }
 
   // Eventos del proveedor.

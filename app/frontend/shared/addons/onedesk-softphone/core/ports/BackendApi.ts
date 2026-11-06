@@ -4,6 +4,7 @@
 import type { AgentProfile } from '../agent/agentProfile.ts'
 import type { AgentPresence, AgentStatus, PauseReason, StatusChange } from '../agent/agentStatus.ts'
 import type { TransferTarget } from '../call/transferTarget.ts'
+import type { SupervisionOverview } from '../supervision/supervisionOverview.ts'
 
 // Lo que el teléfono necesita del agente al arrancar (endpoint 9).
 export interface AgentDetails {
@@ -42,4 +43,11 @@ export interface BackendApi {
   holdCurrentCall(): Promise<number>
   // Retoma al cliente de la llamada en curso (endpoint 20).
   resumeCurrentCall(): Promise<void>
+  // Supervisión, solo para `supervisor` y `admin`. Vista general del centro de llamadas (endpoint 13).
+  getSupervisionOverview(): Promise<SupervisionOverview>
+  // Entra a escuchar una llamada en curso (endpoint 14, solo `listen`). One-Desk llama después a este
+  // teléfono y avisa por el hub con `call.offered` (`kind = "monitor"`).
+  startMonitoring(callId: string): Promise<void>
+  // Sale de la llamada que escucha (endpoint 16). La llamada sigue entre el cliente y el agente.
+  stopMonitoring(callId: string): Promise<void>
 }

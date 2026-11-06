@@ -16,6 +16,9 @@ export type CallAction =
   | 'transfer'
   | 'hold'
   | 'resume'
+  // Supervisión: escuchar una llamada desde el panel y salir de ella.
+  | 'monitor'
+  | 'stop-monitoring'
 
 export interface CallActionContext {
   call: CallState
@@ -39,8 +42,11 @@ export const availableCallActions = ({
 }: CallActionContext): ReadonlySet<CallAction> => {
   switch (call.status) {
     case 'idle':
+      // Escuchar exige además el rol de supervisión: lo comprueba SupervisionController.
       if (!canStartCall(registration)) return NO_ACTIONS
-      return new Set<CallAction>(hasLastDialed ? ['dial', 'redial'] : ['dial'])
+      return new Set<CallAction>(
+        hasLastDialed ? ['dial', 'redial', 'monitor'] : ['dial', 'monitor'],
+      )
     case 'incoming':
       // También se transfiere mientras suena (DECISIONES.md, núcleo #4). Con la transferencia pedida
       // ya no se contesta: One-Desk cancela el tramo de este agente.
@@ -60,6 +66,9 @@ export const availableCallActions = ({
       if (!transferPending) actions.push('transfer')
       return new Set(actions)
     }
+    // Escuchando no se habla: solo se puede salir (DECISIONES.md, supervisión #2).
+    case 'monitoring':
+      return new Set<CallAction>(['stop-monitoring'])
     case 'ending':
       return NO_ACTIONS
     default:

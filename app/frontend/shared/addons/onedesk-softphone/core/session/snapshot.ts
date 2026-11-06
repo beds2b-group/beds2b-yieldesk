@@ -9,6 +9,7 @@ import type { AgentProfile } from '../agent/agentProfile.ts'
 import type { AgentPresence, PauseReason } from '../agent/agentStatus.ts'
 import type { TransferTarget } from '../call/transferTarget.ts'
 import type { SoftphoneErrorCode } from '../ports/SoftphoneError.ts'
+import type { SupervisionOverview } from '../supervision/supervisionOverview.ts'
 
 // Sesión de One-Desk. No hay pantalla de inicio de sesión: el teléfono se conecta solo con la
 // cookie de Zammad y, tras Salir, queda desconectado hasta que se recarga la página (DECISIONES.md,
@@ -46,6 +47,9 @@ export interface SoftphoneSnapshot {
   settings: AgentSettings
   // Último número marcado, para rellamar. Solo en memoria (architecture.md §8.2).
   lastDialed: string | null
+  // Vista general de la supervisión (endpoint 13), al día con el hub. Solo para `supervisor` y
+  // `admin`; null para los demás y mientras no se ha cargado.
+  supervision: SupervisionOverview | null
   // Último error que el agente tiene que ver (architecture.md §1, objetivo 1). Los del registro y
   // los de la sesión se ven en `registration` y en `session`.
   error: SoftphoneFailure | null
@@ -60,5 +64,6 @@ export const INITIAL_SNAPSHOT: SoftphoneSnapshot = {
   pendingTransfer: null,
   settings: DEFAULT_AGENT_SETTINGS,
   lastDialed: null,
+  supervision: null,
   error: null,
 }

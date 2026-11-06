@@ -11,6 +11,7 @@ import { RegistrationController } from './RegistrationController.ts'
 import { SessionController } from './SessionController.ts'
 import { SettingsPersistence } from './SettingsPersistence.ts'
 import { INITIAL_SNAPSHOT, type SoftphoneSnapshot } from './snapshot.ts'
+import { SupervisionController } from './SupervisionController.ts'
 
 import type { EngineCommand } from './commands.ts'
 import type { EngineTabCoordinator, SoftphoneEngine } from './SoftphoneEngine.ts'
@@ -59,6 +60,7 @@ export class LocalEngine implements SoftphoneEngine {
   private readonly registration: RegistrationController
   private readonly calls: CallController
   private readonly realtime: RealtimeController
+  private readonly supervision: SupervisionController
   private readonly subscriptions: Unsubscribe[] = []
 
   constructor(deps: LocalEngineDependencies) {
@@ -70,7 +72,11 @@ export class LocalEngine implements SoftphoneEngine {
       state: this.state,
       provider: this.provider,
     })
-    this.realtime = new RealtimeController({ ...deps, state: this.state })
+    this.realtime = new RealtimeController({
+      ...deps,
+      state: this.state,
+      onConnected: () => void this.supervision.load(),
+    })
     this.session = new SessionController({
       ...deps,
       state: this.state,
@@ -80,6 +86,12 @@ export class LocalEngine implements SoftphoneEngine {
       },
     })
     this.calls = new CallController({ ...deps, state: this.state, provider: this.provider })
+    this.supervision = new SupervisionController({
+      ...deps,
+      state: this.state,
+      answerMonitor: (monitored) => this.calls.answerMonitor(monitored),
+      ringIncoming: (from) => this.calls.handleIncoming(from),
+    })
 
     this.subscriptions.push(
       this.state.subscribe((snapshot) => deps.tabs.publishState(snapshot)),
@@ -145,6 +157,12 @@ export class LocalEngine implements SoftphoneEngine {
       case 'resume':
         void this.calls.resume()
         return
+      case 'monitor-call':
+        void this.supervision.startMonitoring(command.callId)
+        return
+      case 'stop-monitoring':
+        void this.calls.leaveMonitoring((callId) => this.deps.backend.stopMonitoring(callId))
+        return
       case 'update-settings':
         this.updateSettings(command.settings)
         return
@@ -165,6 +183,7 @@ export class LocalEngine implements SoftphoneEngine {
   async destroy(): Promise<void> {
     for (const unsubscribe of this.subscriptions.splice(0)) unsubscribe()
     this.session.dispose()
+    this.supervision.dispose()
     this.calls.endActiveCall()
     await Promise.all([this.registration.unregister(), this.realtime.dispose()])
     this.provider.destroy()
@@ -183,6 +202,7 @@ export class LocalEngine implements SoftphoneEngine {
     await this.registration.unregister()
     await this.session.signOut()
     await closingRealtime
+    this.supervision.clear()
     // Ya sin registro no llegará el aviso de fin de la llamada que se acaba de colgar.
     this.state.patch({ call: IDLE_CALL, pendingTransfer: null, error: null })
   }
@@ -204,10 +224,16 @@ export class LocalEngine implements SoftphoneEngine {
       provider.on('registered', () => this.registration.handleRegistered()),
       provider.on('unregistered', () => this.registration.handleUnregistered()),
       provider.on('tokenWillExpire', () => this.registration.handleTokenWillExpire()),
-      provider.on('incoming', ({ from }) => this.calls.handleIncoming(from)),
+      // La llamada de escucha del supervisor se contesta sola (SupervisionController).
+      provider.on('incoming', ({ from, callSid = null }) => {
+        if (!this.supervision.claimIncoming(callSid, from)) this.calls.handleIncoming(from)
+      }),
       provider.on('accepted', () => this.calls.handleAccepted()),
       provider.on('disconnected', () => this.calls.handleDisconnected()),
-      provider.on('cancelled', () => this.calls.handleCancelled()),
+      provider.on('cancelled', () => {
+        this.supervision.handleIncomingEnded()
+        this.calls.handleCancelled()
+      }),
       provider.on('error', (error) => {
         if (error.code === 'token-expired') this.registration.handleTokenExpired(error)
         else this.calls.handleError(error)

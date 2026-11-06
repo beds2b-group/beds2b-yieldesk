@@ -9,6 +9,15 @@ export type CallState =
   | { status: 'outgoing'; to: string }
   // `heldAt`: desde cuándo (epoch ms) está el cliente en espera según One-Desk (endpoint 19), o null.
   | { status: 'in-call'; peer: string; startedAt: number; muted: boolean; heldAt: number | null }
+  // El supervisor escucha una llamada (endpoint 14): oye al cliente y al agente y nadie le oye.
+  // `agentName` es el del agente que la atiende, si se conoce.
+  | {
+      status: 'monitoring'
+      callId: string
+      customer: string
+      agentName: string | null
+      startedAt: number
+    }
   | { status: 'ending'; peer: string }
 
 export type CallStatus = CallState['status']
@@ -29,6 +38,14 @@ export type CallEvent =
   | { type: 'failed' }
   | { type: 'mute-changed'; muted: boolean }
   | { type: 'hold-changed'; heldAt: number | null }
+  // El teléfono contestó solo la llamada de escucha (`call.offered` con `kind = "monitor"`).
+  | {
+      type: 'monitor-answered'
+      callId: string
+      customer: string
+      agentName: string | null
+      at: number
+    }
 
 export const IDLE_CALL: CallState = { status: 'idle' }
 
@@ -37,7 +54,26 @@ export const IDLE_CALL: CallState = { status: 'idle' }
 const fromIdle = (event: CallEvent): CallState | null => {
   if (event.type === 'incoming') return { status: 'incoming', from: event.from }
   if (event.type === 'dial') return { status: 'outgoing', to: event.to }
+  if (event.type === 'monitor-answered') {
+    const { callId, customer, agentName, at } = event
+    return { status: 'monitoring', callId, customer, agentName, startedAt: at }
+  }
   return null
+}
+
+// Salir (endpoint 16 o colgar) espera, como colgar, a que el proveedor suelte la línea.
+const fromMonitoring = (
+  state: Extract<CallState, { status: 'monitoring' }>,
+  event: CallEvent,
+): CallState | null => {
+  switch (event.type) {
+    case 'hangup':
+      return { status: 'ending', peer: state.customer }
+    case 'disconnected':
+      return IDLE_CALL
+    default:
+      return null
+  }
 }
 
 const fromIncoming = (
@@ -114,6 +150,8 @@ export const transitionCall = (state: CallState, event: CallEvent): CallState =>
       return fromOutgoing(state, event) ?? state
     case 'in-call':
       return fromInCall(state, event) ?? state
+    case 'monitoring':
+      return fromMonitoring(state, event) ?? state
     case 'ending':
       return fromEnding(event) ?? state
     default:

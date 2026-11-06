@@ -25,5 +25,8 @@ export type EngineCommand =
   // Espera del cliente (endpoints 19 y 20 de One-Desk).
   | { type: 'hold' }
   | { type: 'resume' }
+  // Supervisión (endpoints 14 y 16 de One-Desk): escuchar una llamada en curso y salir de ella.
+  | { type: 'monitor-call'; callId: string }
+  | { type: 'stop-monitoring' }
   | { type: 'update-settings'; settings: Partial<AgentSettings> }
   | { type: 'dismiss-error' }
