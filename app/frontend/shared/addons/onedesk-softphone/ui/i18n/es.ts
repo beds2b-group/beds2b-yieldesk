@@ -80,6 +80,29 @@ export const es = {
   'agents.externalPlaceholder': 'Transferir a un número',
   'agents.externalTransfer': 'Transferir a este número',
 
+  'supervision.open': 'Panel de supervisión',
+  'supervision.title': 'Supervisión',
+  'supervision.back': 'Volver',
+  'supervision.tabActive': 'En curso',
+  'supervision.tabWaiting': 'En espera',
+  'supervision.tabAgents': 'Agentes',
+  'supervision.loading': 'Cargando la supervisión…',
+  'supervision.noActive': 'No hay llamadas en curso.',
+  'supervision.noWaiting': 'No hay llamadas en espera.',
+  'supervision.noAgents': 'No hay agentes.',
+  'supervision.noAgent': 'Sin agente',
+  'supervision.held': 'En espera · {duration}',
+  'supervision.listening': 'Escuchando',
+  'supervision.listenTo': 'Escuchar la llamada de {name}',
+  'supervision.waitingFor': 'Esperando {duration}',
+
+  'monitoring.title': 'Escuchando',
+  'monitoring.agent': 'Llamada de {name}',
+  'monitoring.unknownAgent': 'Llamada de otro agente',
+  'monitoring.hint': 'Solo escuchas: ni el agente ni el cliente te oyen.',
+  'monitoring.panel': 'Ver panel',
+  'monitoring.stop': 'Salir',
+
   'connection.connecting': 'Conectando con One-Desk…',
   'connection.registering': 'Registrando el teléfono…',
   'connection.retrying': 'Se reintentará automáticamente.',
@@ -116,6 +139,9 @@ export const es = {
   'problems.invalid_status_transition': 'Ahora no puedes pasar a ese estado.',
   'problems.invalid_pause_reason': 'Ese motivo de pausa ya no existe.',
   'problems.twilio_error': 'La centralita no ha respondido. Inténtalo de nuevo.',
+  'problems.supervisor_busy': 'Para escuchar tienes que estar disponible, en pausa o desconectado.',
+  'problems.already_monitoring': 'Ya estás escuchando esa llamada.',
+  'problems.call_not_found': 'Esa llamada ya no existe.',
 } as const
 
 export type MessageKey = keyof typeof es

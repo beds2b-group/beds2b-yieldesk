@@ -4,6 +4,7 @@
 import { defineStore } from 'pinia'
 import { computed, onScopeDispose, shallowRef } from 'vue'
 
+import { canSupervise as canSuperviseRole } from '../../core/agent/agentProfile.ts'
 import { canChangeStatusManually, type PauseReason } from '../../core/agent/agentStatus.ts'
 import { availableCallActions } from '../../core/call/callActions.ts'
 import { useSoftphoneContext } from '../softphoneContext.ts'
@@ -50,7 +51,19 @@ export const useSoftphoneSessionStore = defineStore('onedeskSoftphoneSession', (
     return pauseReasons.find((reason) => reason.id === presence.pauseReasonId) ?? null
   })
 
+  // El panel de supervisión solo lo ven `supervisor` y `admin` (DECISIONES.md, diseño #7).
+  const canSupervise = computed(() => agent.value !== null && canSuperviseRole(agent.value.role))
+
   const dispatch = (command: EngineCommand): void => engine.dispatch(command)
 
-  return { snapshot, tabRole, agent, callActions, canChangeStatus, currentPauseReason, dispatch }
+  return {
+    snapshot,
+    tabRole,
+    agent,
+    callActions,
+    canChangeStatus,
+    currentPauseReason,
+    canSupervise,
+    dispatch,
+  }
 })

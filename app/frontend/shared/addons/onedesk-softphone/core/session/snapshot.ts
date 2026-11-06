@@ -50,6 +50,8 @@ export interface SoftphoneSnapshot {
   // Vista general de la supervisión (endpoint 13), al día con el hub. Solo para `supervisor` y
   // `admin`; null para los demás y mientras no se ha cargado.
   supervision: SupervisionOverview | null
+  // Llamada cuya escucha se ha pedido y aún no ha llegado (endpoint 14).
+  pendingMonitor: string | null
   // Último error que el agente tiene que ver (architecture.md §1, objetivo 1). Los del registro y
   // los de la sesión se ven en `registration` y en `session`.
   error: SoftphoneFailure | null
@@ -65,5 +67,6 @@ export const INITIAL_SNAPSHOT: SoftphoneSnapshot = {
   settings: DEFAULT_AGENT_SETTINGS,
   lastDialed: null,
   supervision: null,
+  pendingMonitor: null,
   error: null,
 }

@@ -120,6 +120,7 @@ export class SupervisionController {
 
     const pending: PendingMonitor = { callId, legCallSid: null, customer: null }
     this.pending = pending
+    this.deps.state.patch({ pendingMonitor: callId })
     try {
       await this.deps.backend.startMonitoring(callId)
       if (this.pending === pending) {
@@ -235,6 +236,8 @@ export class SupervisionController {
   private forgetPending(): void {
     this.cancelPendingExpiry?.()
     this.cancelPendingExpiry = null
+    if (this.pending === null) return
     this.pending = null
+    this.deps.state.patch({ pendingMonitor: null })
   }
 }

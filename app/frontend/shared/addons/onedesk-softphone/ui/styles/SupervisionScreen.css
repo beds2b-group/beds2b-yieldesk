@@ -1,0 +1,299 @@
+/* Copyright (C) 2026 Beds2B. Generado por zammad:sync desde beds2b-softphone: no editar aquí. Se distribuye bajo AGPL-3.0 como parte de esta versión modificada de Zammad. Ver MODIFICATIONS.md. */
+
+/* Panel de supervisión (DECISIONES.md, panel de supervisión #1): la tarjeta se ensancha un poco. */
+.sp-panel--wide {
+  width: 380px;
+}
+
+.sp-supervision {
+  flex: 1;
+  min-height: 0;
+}
+
+.sp-supervision__title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 0 2px;
+}
+
+.sp-supervision__back {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: var(--sp-radius-field);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sp-color-text);
+  background: none;
+}
+
+.sp-supervision__back:hover {
+  background: var(--sp-color-surface-2);
+}
+
+.sp-supervision__title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.sp-supervision__tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  margin-top: 12px;
+  padding: 3px;
+  border-radius: var(--sp-radius-field);
+  background: var(--sp-color-surface-2);
+}
+
+.sp-supervision__tab {
+  height: 30px;
+  padding: 0 6px;
+  border: none;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--sp-color-text-2);
+  background: none;
+}
+
+.sp-supervision__tab:hover {
+  background: var(--sp-color-surface-hover);
+}
+
+.sp-supervision__tab--selected,
+.sp-supervision__tab--selected:hover {
+  font-weight: bold;
+  color: var(--sp-color-text);
+  background: var(--sp-color-surface);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.sp-supervision__count {
+  min-width: 18px;
+  padding: 1px 5px;
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--sp-color-primary-text);
+  background: var(--sp-color-primary-soft);
+}
+
+.sp-supervision__message {
+  margin: 24px 8px 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--sp-color-text-muted);
+}
+
+.sp-supervision__list {
+  max-height: 330px;
+  margin: 12px 0 0;
+  padding: 0 2px 0 0;
+  list-style: none;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sp-supervision__item {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border: 1px solid var(--sp-color-border);
+  border-radius: var(--sp-radius-field);
+}
+
+/* Los desconectados, al final y en gris (#3). */
+.sp-supervision__item--offline {
+  opacity: 0.55;
+}
+
+.sp-supervision__avatar {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--sp-color-primary-text);
+  background: var(--sp-color-primary-soft);
+}
+
+.sp-supervision__avatar-dot {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--sp-color-surface);
+}
+
+.sp-supervision__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sp-supervision__primary {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+}
+
+.sp-supervision__meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-size: 12px;
+  color: var(--sp-color-text-muted);
+}
+
+.sp-supervision__agent {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sp-supervision__time {
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.sp-supervision__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.sp-supervision__badges:empty {
+  display: none;
+}
+
+.sp-supervision__badge {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+  color: var(--sp-color-text-2);
+  background: var(--sp-color-surface-2);
+}
+
+.sp-supervision__badge--available {
+  color: var(--sp-color-success-hover);
+  background: var(--sp-color-success-soft);
+}
+
+.sp-supervision__badge--reserved,
+.sp-supervision__badge--on-call,
+.sp-supervision__badge--listening {
+  color: var(--sp-color-primary-text);
+  background: var(--sp-color-primary-soft);
+}
+
+.sp-supervision__badge--paused,
+.sp-supervision__badge--held {
+  color: var(--sp-color-warning-text);
+  background: var(--sp-color-warning-soft);
+}
+
+.sp-supervision__badge--wrap-up {
+  color: var(--sp-color-wrap-up-text);
+  background: var(--sp-color-wrap-up-soft);
+}
+
+.sp-supervision__extension {
+  flex-shrink: 0;
+}
+
+.sp-supervision__listen {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  border-radius: var(--sp-radius-field);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sp-color-primary-text);
+  background: var(--sp-color-primary-soft);
+}
+
+.sp-supervision__listen:hover:not(:disabled) {
+  color: var(--sp-color-surface);
+  background: var(--sp-color-primary);
+}
+
+.sp-supervision__listen:disabled {
+  color: var(--sp-color-text-faint);
+  background: var(--sp-color-surface-2);
+  cursor: default;
+}
+
+.sp-supervision__listen--pending,
+.sp-supervision__listen--pending:disabled {
+  color: var(--sp-color-surface);
+  background: var(--sp-color-primary);
+}
+
+/* Pantalla «Escuchando» (#2). */
+.sp-monitoring {
+  flex: 1;
+}
+
+.sp-monitoring__title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 18px 2px 0;
+  font-size: 15px;
+  font-weight: bold;
+  color: var(--sp-color-primary-text);
+}
+
+.sp-monitoring .sp-call-strip {
+  margin-top: 14px;
+}
+
+.sp-monitoring__agent {
+  margin: 14px 2px 0;
+  font-size: 14px;
+}
+
+.sp-monitoring__hint {
+  margin: 6px 2px 0;
+  font-size: 12px;
+  color: var(--sp-color-text-muted);
+}
+
+.sp-monitoring .sp-bottom-row {
+  margin-top: auto;
+}

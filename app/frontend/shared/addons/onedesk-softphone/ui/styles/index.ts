@@ -17,6 +17,7 @@ import pauseReasonPanel from './PauseReasonPanel.css?inline'
 import softphoneHeader from './SoftphoneHeader.css?inline'
 import softphoneRoot from './SoftphoneRoot.css?inline'
 import statusNotices from './StatusNotices.css?inline'
+import supervisionScreen from './SupervisionScreen.css?inline'
 import tokens from './tokens.css?inline'
 
 // Hojas que la shell pasa a defineCustomElement en `styles`, que las coloca en la raíz del Shadow
@@ -38,5 +39,6 @@ export const SOFTPHONE_STYLES: readonly string[] = [
   incomingScreen,
   inCallScreen,
   agentsScreen,
+  supervisionScreen,
   launcherButton,
 ]

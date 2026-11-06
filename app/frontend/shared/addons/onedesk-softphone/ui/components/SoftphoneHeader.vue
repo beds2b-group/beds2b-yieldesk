@@ -5,8 +5,12 @@ import { computed } from 'vue'
 
 import { useI18n } from '../i18n/useI18n.ts'
 import { useSoftphoneSessionStore } from '../stores/onedeskSoftphoneSession.ts'
+import { useSoftphoneUiStore } from '../stores/onedeskSoftphoneUi.ts'
+
+import SoftphoneIcon from './SoftphoneIcon.vue'
 
 const session = useSoftphoneSessionStore()
+const ui = useSoftphoneUiStore()
 const { t } = useI18n()
 
 const title = computed(() => {
@@ -37,5 +41,18 @@ const statusLabel = computed(() => {
         {{ statusLabel }}
       </p>
     </div>
+    <button
+      v-if="session.canSupervise"
+      type="button"
+      class="sp-header__supervision"
+      :class="{ 'sp-header__supervision--open': ui.supervisionOpen }"
+      :aria-pressed="ui.supervisionOpen"
+      :title="t('supervision.open')"
+      :aria-label="t('supervision.open')"
+      data-testid="open-supervision"
+      @click="ui.toggleSupervision()"
+    >
+      <SoftphoneIcon name="eye" :size="18" />
+    </button>
   </header>
 </template>

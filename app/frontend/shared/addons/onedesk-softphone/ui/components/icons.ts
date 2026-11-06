@@ -70,6 +70,16 @@ export const ICONS = {
     path('M9 9v3a3 3 0 0 0 5.12 2.12'),
     line('12', '19', '12', '22'),
   ],
+  // Panel de supervisión (cabecera) y Escuchar.
+  eye: [
+    path('M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z'),
+    { tag: 'circle', attrs: { cx: '12', cy: '12', r: '3' } },
+  ],
+  headphones: [
+    path(
+      'M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3',
+    ),
+  ],
   close: [path('M18 6 6 18'), path('m6 6 12 12')],
   'chevron-down': [{ tag: 'polyline', attrs: { points: '6 9 12 15 18 9' } }],
   'chevron-left': [{ tag: 'polyline', attrs: { points: '15 18 9 12 15 6' } }],

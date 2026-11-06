@@ -39,3 +39,29 @@
   gap: 6px;
   font-size: 14px;
 }
+
+/* Panel de supervisión (DECISIONES.md, diseño #7): solo para `supervisor` y `admin`. */
+.sp-header__supervision {
+  width: 34px;
+  height: 34px;
+  margin-top: 9px;
+  padding: 0;
+  flex-shrink: 0;
+  border: none;
+  border-radius: var(--sp-radius-field);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sp-color-text-2);
+  background: var(--sp-color-surface-2);
+}
+
+.sp-header__supervision:hover {
+  background: var(--sp-color-surface-hover);
+}
+
+.sp-header__supervision--open,
+.sp-header__supervision--open:hover {
+  color: var(--sp-color-primary-text);
+  background: var(--sp-color-primary-soft);
+}
