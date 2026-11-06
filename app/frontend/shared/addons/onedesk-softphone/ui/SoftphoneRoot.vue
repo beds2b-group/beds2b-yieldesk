@@ -65,7 +65,6 @@ watch(callStatus, (status) => {
     <section
       v-show="ui.panelOpen"
       class="sp-panel"
-      :class="{ 'sp-panel--wide': supervising }"
       :aria-label="t('launcher.close')"
       data-testid="panel"
     >
