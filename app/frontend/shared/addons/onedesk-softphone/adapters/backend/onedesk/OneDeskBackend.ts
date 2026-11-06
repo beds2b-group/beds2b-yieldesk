@@ -8,6 +8,7 @@ import {
   readAgentDetails,
   readAgentSummaries,
   readCurrentCallId,
+  readHeldAt,
   readPresence,
   readVoiceToken,
   statusChangeBody,
@@ -26,6 +27,8 @@ export const ONE_DESK_ROUTES = {
   myStatus: '/api/agents/me/status',
   agents: '/api/agents',
   transfers: (callId: string) => `/api/calls/${encodeURIComponent(callId)}/transfers`,
+  hold: (callId: string) => `/api/calls/${encodeURIComponent(callId)}/hold`,
+  resume: (callId: string) => `/api/calls/${encodeURIComponent(callId)}/resume`,
   supervision: '/api/supervision/overview',
   monitor: (callId: string) => `/api/calls/${encodeURIComponent(callId)}/monitor`,
   recordings: (callId: string) => `/api/calls/${encodeURIComponent(callId)}/recordings`,
@@ -98,14 +101,7 @@ export class OneDeskBackend implements BackendApi {
   // El teléfono conoce el `CallSid` de su tramo, pero One-Desk transfiere por el `id` de la llamada:
   // se lee de la llamada en curso del agente (endpoint 9) justo antes de pedir la transferencia.
   async transferCurrentCall(target: TransferTarget): Promise<void> {
-    const callId = readCurrentCallId(
-      await this.withSession({ operation: 'agent', path: ONE_DESK_ROUTES.me }),
-    )
-    if (callId === null) {
-      throw new SoftphoneError('conflict', 'transfer: no call in progress', {
-        problem: 'call_not_active',
-      })
-    }
+    const callId = await this.currentCallId('transfer')
     await this.withSession({
       operation: 'transfer',
       path: ONE_DESK_ROUTES.transfers(callId),
@@ -115,6 +111,40 @@ export class OneDeskBackend implements BackendApi {
           ? { targetAgentId: target.agentId }
           : { externalNumber: target.externalNumber },
     })
+  }
+
+  // Endpoint 19. Como la transferencia, por el `id` de la llamada en curso.
+  async holdCurrentCall(): Promise<number> {
+    const callId = await this.currentCallId('hold')
+    return readHeldAt(
+      await this.withSession({
+        operation: 'hold',
+        path: ONE_DESK_ROUTES.hold(callId),
+        method: 'PUT',
+      }),
+    )
+  }
+
+  // Endpoint 20.
+  async resumeCurrentCall(): Promise<void> {
+    const callId = await this.currentCallId('resume')
+    await this.withSession({
+      operation: 'resume',
+      path: ONE_DESK_ROUTES.resume(callId),
+      method: 'PUT',
+    })
+  }
+
+  private async currentCallId(operation: string): Promise<string> {
+    const callId = readCurrentCallId(
+      await this.withSession({ operation: 'agent', path: ONE_DESK_ROUTES.me }),
+    )
+    if (callId === null) {
+      throw new SoftphoneError('conflict', `${operation}: no call in progress`, {
+        problem: 'call_not_active',
+      })
+    }
+    return callId
   }
 
   // La sesión de One-Desk caduca sin actividad (endpoint 7). Si One-Desk ya no la reconoce, se abre

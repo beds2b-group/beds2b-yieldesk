@@ -22,5 +22,8 @@ export type EngineCommand =
   // Una tecla del teclado: suena siempre y, en llamada, se envía como DTMF.
   | { type: 'press-key'; digit: DtmfDigit }
   | { type: 'transfer'; target: TransferTarget }
+  // Espera del cliente (endpoints 19 y 20 de One-Desk).
+  | { type: 'hold' }
+  | { type: 'resume' }
   | { type: 'update-settings'; settings: Partial<AgentSettings> }
   | { type: 'dismiss-error' }

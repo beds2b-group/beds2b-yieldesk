@@ -37,4 +37,9 @@ export interface BackendApi {
   // Transfiere la llamada en curso del agente de la sesión. One-Desk responde enseguida y saca al
   // agente de la llamada cuando el destino contesta (endpoint 12).
   transferCurrentCall(target: TransferTarget): Promise<void>
+  // Pone en espera al cliente de la llamada en curso del agente (endpoint 19): oye música y el agente
+  // sigue en la llamada. Devuelve desde cuándo (epoch ms), según One-Desk.
+  holdCurrentCall(): Promise<number>
+  // Retoma al cliente de la llamada en curso (endpoint 20).
+  resumeCurrentCall(): Promise<void>
 }

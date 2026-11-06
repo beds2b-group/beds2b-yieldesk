@@ -14,6 +14,8 @@ export type CallAction =
   | 'mute'
   | 'dtmf'
   | 'transfer'
+  | 'hold'
+  | 'resume'
 
 export interface CallActionContext {
   call: CallState
@@ -46,10 +48,18 @@ export const availableCallActions = ({
       return new Set<CallAction>(['answer', 'reject', 'transfer'])
     case 'outgoing':
       return new Set<CallAction>(['hangup'])
-    case 'in-call':
-      return new Set<CallAction>(
-        transferPending ? ['hangup', 'mute', 'dtmf'] : ['hangup', 'mute', 'dtmf', 'transfer'],
-      )
+    case 'in-call': {
+      // En espera siguen Silenciar, el teclado y Transferir (DECISIONES.md, espera #2; One-Desk le
+      // quita la espera al cliente cuando contesta el destino).
+      const actions: CallAction[] = [
+        'hangup',
+        'mute',
+        'dtmf',
+        call.heldAt === null ? 'hold' : 'resume',
+      ]
+      if (!transferPending) actions.push('transfer')
+      return new Set(actions)
+    }
     case 'ending':
       return NO_ACTIONS
     default:

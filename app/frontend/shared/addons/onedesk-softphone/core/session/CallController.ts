@@ -31,6 +31,8 @@ export interface CallControllerDependencies {
 // llega al proveedor. El estado lo decide la máquina de llamada.
 export class CallController {
   private readonly deps: CallControllerDependencies
+  // Una petición de espera a la vez: un doble clic no manda la segunda.
+  private holdRequestPending = false
 
   constructor(deps: CallControllerDependencies) {
     this.deps = deps
@@ -117,6 +119,17 @@ export class CallController {
     }
   }
 
+  // Espera del cliente (endpoints 19 y 20). La espera la lleva One-Desk, no el proveedor: el estado
+  // cambia cuando One-Desk la confirma, con su `heldAt`. Si responde que ya estaba así (se adelantó
+  // otra petición), se toma ese estado sin mostrar error. Si falla, la llamada sigue como estaba.
+  async hold(): Promise<void> {
+    await this.changeHold(true)
+  }
+
+  async resume(): Promise<void> {
+    await this.changeHold(false)
+  }
+
   // Termina lo que haya en curso antes de Salir o de desmontar el teléfono (architecture.md §8.3).
   endActiveCall(): void {
     if (this.allows('reject')) this.reject()
@@ -165,6 +178,39 @@ export class CallController {
   handleError(error: SoftphoneError): void {
     this.report(error)
     this.apply({ type: 'failed' })
+  }
+
+  private async changeHold(onHold: boolean): Promise<void> {
+    const { call } = this.deps.state.snapshot
+    if (this.holdRequestPending || call.status !== 'in-call') return
+    if (!this.allows(onHold ? 'hold' : 'resume')) return
+
+    const { startedAt } = call
+    this.holdRequestPending = true
+    try {
+      if (onHold) {
+        this.applyHold(startedAt, await this.deps.backend.holdCurrentCall())
+      } else {
+        await this.deps.backend.resumeCurrentCall()
+        this.applyHold(startedAt, null)
+      }
+    } catch (error) {
+      const failure = asSoftphoneError(error, 'backend')
+      // El `heldAt` real no viene en el 409: se cuenta desde ahora.
+      if (failure.problem === 'already_on_hold') this.applyHold(startedAt, this.deps.clock.now())
+      else if (failure.problem === 'not_on_hold') this.applyHold(startedAt, null)
+      else this.report(failure)
+    } finally {
+      this.holdRequestPending = false
+    }
+  }
+
+  // Solo si sigue siendo la misma llamada: pudo terminar mientras One-Desk respondía.
+  private applyHold(startedAt: number, heldAt: number | null): void {
+    const { call } = this.deps.state.snapshot
+    if (call.status === 'in-call' && call.startedAt === startedAt) {
+      this.apply({ type: 'hold-changed', heldAt })
+    }
   }
 
   private apply(event: CallEvent): void {

@@ -23,7 +23,7 @@ Se distribuyen bajo AGPL-3.0 como parte de esta versión modificada de Zammad.
 
 | Añadido | Última modificación | Fichero | Contenido |
 |---|---|---|---|
-| 2026-10-30 | 2026-10-30 | `app/frontend/shared/addons/onedesk-softphone/` | Softphone, generado por `zammad:sync` desde `beds2b-softphone` (versión en `VERSION`) |
+| 2026-10-30 | 2026-11-06 | `app/frontend/shared/addons/onedesk-softphone/` | Softphone, generado por `zammad:sync` desde `beds2b-softphone` (versión en `VERSION`) |
 | 2026-10-30 | 2026-10-30 | `app/frontend/entrypoints/softphone.ts` | Entrypoint de Vite del softphone en la interfaz clásica, generado por `zammad:sync` |
 | 2026-07-06 | 2026-07-06 | `public/assets/images/icons/call-in.svg` | Icono de aceptar llamada **[VERIFICAR origen y licencia]** |
 | 2026-07-06 | 2026-07-06 | `public/assets/images/icons/call-hang-out.svg` | Icono de colgar llamada **[VERIFICAR origen y licencia]** |

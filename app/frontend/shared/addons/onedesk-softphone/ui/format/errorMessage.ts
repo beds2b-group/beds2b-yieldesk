@@ -17,6 +17,7 @@ const PROBLEM_MESSAGES: Readonly<Record<string, MessageKey>> = {
   agent_busy: 'problems.agent_busy',
   invalid_status_transition: 'problems.invalid_status_transition',
   invalid_pause_reason: 'problems.invalid_pause_reason',
+  twilio_error: 'problems.twilio_error',
 }
 
 export const errorMessage = (t: Translate, failure: SoftphoneFailure): string => {

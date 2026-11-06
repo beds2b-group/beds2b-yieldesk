@@ -55,6 +55,13 @@ export const es = {
   'call.hangup': 'Colgar',
   'call.transfer': 'Transferir',
   'call.ending': 'Finalizando…',
+  'call.hold': 'Poner en espera',
+  'call.resume': 'Retomar',
+  'call.onHold': 'Cliente en espera · {duration}',
+
+  'hangup.onHold': 'El cliente está en espera. ¿Colgar la llamada?',
+  'hangup.confirm': 'Colgar',
+  'hangup.cancel': 'Cancelar',
 
   'agents.title': 'Transferir llamada',
   'agents.back': 'Volver',
@@ -108,6 +115,7 @@ export const es = {
   'problems.agent_busy': 'No puedes cambiar de estado mientras atiendes una llamada.',
   'problems.invalid_status_transition': 'Ahora no puedes pasar a ese estado.',
   'problems.invalid_pause_reason': 'Ese motivo de pausa ya no existe.',
+  'problems.twilio_error': 'La centralita no ha respondido. Inténtalo de nuevo.',
 } as const
 
 export type MessageKey = keyof typeof es

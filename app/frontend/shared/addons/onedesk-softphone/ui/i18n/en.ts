@@ -55,6 +55,13 @@ export const en: Messages = {
   'call.hangup': 'Hang up',
   'call.transfer': 'Transfer',
   'call.ending': 'Ending…',
+  'call.hold': 'Put on hold',
+  'call.resume': 'Resume',
+  'call.onHold': 'Customer on hold · {duration}',
+
+  'hangup.onHold': 'The customer is on hold. Hang up the call?',
+  'hangup.confirm': 'Hang up',
+  'hangup.cancel': 'Cancel',
 
   'agents.title': 'Transfer call',
   'agents.back': 'Back',
@@ -108,4 +115,5 @@ export const en: Messages = {
   'problems.agent_busy': 'You cannot change your status while handling a call.',
   'problems.invalid_status_transition': 'You cannot switch to that status right now.',
   'problems.invalid_pause_reason': 'That pause reason no longer exists.',
+  'problems.twilio_error': 'The phone system did not respond. Please try again.',
 }

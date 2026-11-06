@@ -125,6 +125,14 @@ export const readCurrentCallId = (value: unknown): string | null => {
   return string('agent', object('agent', body.currentCall, 'currentCall'), 'id')
 }
 
+// `heldAt` de la respuesta del endpoint 19 (CallHoldResponse de One-Desk): desde cuándo está el
+// cliente en espera.
+export const readHeldAt = (value: unknown): number => {
+  const heldAt = optionalInstant(object('hold', value), 'heldAt')
+  if (heldAt === null) throw invalid('hold', 'heldAt')
+  return heldAt
+}
+
 // Endpoint 11.
 export const readAgentSummaries = (value: unknown): readonly AgentSummary[] => {
   const operation = 'agents'

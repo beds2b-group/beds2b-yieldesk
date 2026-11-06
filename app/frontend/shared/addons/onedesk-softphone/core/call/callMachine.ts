@@ -7,7 +7,8 @@ export type CallState =
   | { status: 'idle' }
   | { status: 'incoming'; from: string }
   | { status: 'outgoing'; to: string }
-  | { status: 'in-call'; peer: string; startedAt: number; muted: boolean }
+  // `heldAt`: desde cuándo (epoch ms) está el cliente en espera según One-Desk (endpoint 19), o null.
+  | { status: 'in-call'; peer: string; startedAt: number; muted: boolean; heldAt: number | null }
   | { status: 'ending'; peer: string }
 
 export type CallStatus = CallState['status']
@@ -15,6 +16,7 @@ export type CallStatus = CallState['status']
 // Órdenes del agente (dial, answer, reject, hangup, mute) y eventos del proveedor (incoming,
 // accepted, cancelled, disconnected, failed). `at` es epoch en ms. Al transferir, el agente sigue en
 // la llamada hasta que el destino contesta y One-Desk lo saca: llega como `disconnected`.
+// `hold-changed` llega cuando One-Desk confirma la espera o la vuelta (endpoints 19 y 20).
 export type CallEvent =
   | { type: 'incoming'; from: string }
   | { type: 'dial'; to: string }
@@ -26,6 +28,7 @@ export type CallEvent =
   | { type: 'disconnected' }
   | { type: 'failed' }
   | { type: 'mute-changed'; muted: boolean }
+  | { type: 'hold-changed'; heldAt: number | null }
 
 export const IDLE_CALL: CallState = { status: 'idle' }
 
@@ -43,7 +46,13 @@ const fromIncoming = (
 ): CallState | null => {
   switch (event.type) {
     case 'answer':
-      return { status: 'in-call', peer: state.from, startedAt: event.at, muted: false }
+      return {
+        status: 'in-call',
+        peer: state.from,
+        startedAt: event.at,
+        muted: false,
+        heldAt: null,
+      }
     case 'reject':
     case 'cancelled':
     case 'disconnected':
@@ -59,7 +68,7 @@ const fromOutgoing = (
 ): CallState | null => {
   switch (event.type) {
     case 'accepted':
-      return { status: 'in-call', peer: state.to, startedAt: event.at, muted: false }
+      return { status: 'in-call', peer: state.to, startedAt: event.at, muted: false, heldAt: null }
     case 'hangup':
     case 'failed':
     case 'disconnected':
@@ -78,6 +87,8 @@ const fromInCall = (
   switch (event.type) {
     case 'mute-changed':
       return { ...state, muted: event.muted }
+    case 'hold-changed':
+      return { ...state, heldAt: event.heldAt }
     case 'hangup':
       return { status: 'ending', peer: state.peer }
     case 'disconnected':

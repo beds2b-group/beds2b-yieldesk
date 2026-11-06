@@ -139,6 +139,12 @@ export class LocalEngine implements SoftphoneEngine {
       case 'transfer':
         void this.calls.transfer(command.target)
         return
+      case 'hold':
+        void this.calls.hold()
+        return
+      case 'resume':
+        void this.calls.resume()
+        return
       case 'update-settings':
         this.updateSettings(command.settings)
         return
