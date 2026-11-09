@@ -5,6 +5,7 @@ import { asSoftphoneError } from '../ports/SoftphoneError.ts'
 import { retryDelayMs } from '../registration/retryPolicy.ts'
 
 import type { EngineState } from './EngineState.ts'
+import type { RealtimeStatus } from './snapshot.ts'
 import type { BackendApi } from '../ports/BackendApi.ts'
 import type { CancelTask, Clock } from '../ports/Clock.ts'
 import type { Unsubscribe } from '../ports/events.ts'
@@ -43,8 +44,13 @@ export class RealtimeController {
     this.subscriptions = [
       deps.realtime.on('agentStatusChanged', (change) => this.handleStatusChange(change)),
       deps.realtime.on('closed', (error) => this.handleClosed(error?.code ?? null)),
+      deps.realtime.on('reconnecting', () => {
+        if (this.running) this.setStatus('lost')
+      }),
       deps.realtime.on('reconnected', () => {
-        if (this.running) this.deps.onConnected?.()
+        if (!this.running) return
+        this.setStatus('connected')
+        this.deps.onConnected?.()
       }),
     ]
   }
@@ -62,6 +68,7 @@ export class RealtimeController {
     this.cycle += 1
     if (!this.running) return
     this.running = false
+    this.setStatus('idle')
     try {
       await this.deps.realtime.disconnect()
     } catch (error) {
@@ -87,6 +94,7 @@ export class RealtimeController {
         return
       }
       this.deps.logger.info('Realtime channel connected', { attempt })
+      this.setStatus('connected')
       this.deps.onConnected?.()
     } catch (error) {
       if (cycle === this.cycle) this.retry(asSoftphoneError(error, 'network').code, cycle, attempt)
@@ -101,6 +109,7 @@ export class RealtimeController {
 
   private retry(code: SoftphoneErrorCode, cycle: number, failedAttempt: number): void {
     this.deps.logger.warn('Realtime channel unavailable', { code, attempt: failedAttempt })
+    this.setStatus('lost')
     this.cancelPending()
     // Tras una caída se reconecta enseguida; tras un intento fallido, con espera creciente.
     const delay = failedAttempt === 0 ? 0 : retryDelayMs(failedAttempt)
@@ -119,6 +128,10 @@ export class RealtimeController {
     const currentSince = current?.since ?? null
     if (currentSince !== null && presence.since !== null && presence.since < currentSince) return
     this.deps.state.patch({ presence })
+  }
+
+  private setStatus(realtime: RealtimeStatus): void {
+    if (this.deps.state.snapshot.realtime !== realtime) this.deps.state.patch({ realtime })
   }
 
   private cancelPending(): void {

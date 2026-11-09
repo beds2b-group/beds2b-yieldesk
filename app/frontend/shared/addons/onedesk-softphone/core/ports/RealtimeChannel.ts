@@ -27,6 +27,8 @@ export interface RealtimeEventMap {
   callOffered: CallOffer
   // Solo llega a `supervisor` y `admin` (grupo `supervisors` del hub).
   supervisionCallUpdated: SupervisionCallUpdate
+  // La conexión se ha cortado y el adaptador está intentando recuperarla solo.
+  reconnecting: undefined
   // El adaptador ha recuperado solo una conexión que se había cortado.
   reconnected: undefined
   // La conexión se ha perdido y el adaptador ya no la recupera solo. Llega con el fallo, si lo hay.

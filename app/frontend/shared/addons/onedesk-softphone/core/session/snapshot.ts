@@ -21,6 +21,11 @@ export type SessionState =
   | { status: 'failed'; code: SoftphoneErrorCode; attempt: number }
   | { status: 'signed-out' }
 
+// Canal en tiempo real con One-Desk: `idle` sin sesión o antes del primer intento, `connected`
+// abierto y `lost` cuando un intento ha fallado o la conexión se ha cortado y se está recuperando. El
+// teléfono avisa con `lost`: sin canal, One-Desk deja de ofrecerle llamadas (DECISIONES.md, canal #5).
+export type RealtimeStatus = 'idle' | 'connected' | 'lost'
+
 export interface PendingTransfer {
   target: TransferTarget
 }
@@ -52,6 +57,7 @@ export interface SoftphoneSnapshot {
   supervision: SupervisionOverview | null
   // Llamada cuya escucha se ha pedido y aún no ha llegado (endpoint 14).
   pendingMonitor: string | null
+  realtime: RealtimeStatus
   // Último error que el agente tiene que ver (architecture.md §1, objetivo 1). Los del registro y
   // los de la sesión se ven en `registration` y en `session`.
   error: SoftphoneFailure | null
@@ -68,5 +74,6 @@ export const INITIAL_SNAPSHOT: SoftphoneSnapshot = {
   lastDialed: null,
   supervision: null,
   pendingMonitor: null,
+  realtime: 'idle',
   error: null,
 }

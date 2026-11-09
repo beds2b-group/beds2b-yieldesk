@@ -21,6 +21,10 @@ const registration = computed(() => session.snapshot.registration)
 
 const actionError = computed(() => session.snapshot.error)
 
+// Sin canal en tiempo real One-Desk deja de ofrecer llamadas al agente: se avisa mientras se
+// recupera (DECISIONES.md, canal #5).
+const realtimeLost = computed(() => session.agent !== null && session.snapshot.realtime === 'lost')
+
 // Solo suena la pestaña líder, así que el aviso solo tiene sentido en ella (DECISIONES.md,
 // diseño #12).
 const showSoundNotice = computed(
@@ -53,6 +57,15 @@ const showSoundNotice = computed(
         {{ t('connection.retry') }}
       </button>
     </div>
+
+    <p
+      v-if="realtimeLost"
+      class="sp-notice sp-notice--warning"
+      role="status"
+      data-testid="notice-realtime"
+    >
+      {{ t('connection.realtimeLost') }}
+    </p>
 
     <div
       v-if="actionError !== null"

@@ -108,6 +108,8 @@ export const en: Messages = {
   'connection.registering': 'Registering the phone…',
   'connection.retrying': 'It will retry automatically.',
   'connection.retry': 'Retry',
+  'connection.realtimeLost':
+    'No connection with One-Desk: reconnecting… If it does not come back, you will stop receiving calls.',
   'connection.signedOut': 'You have signed out of the phone. Reload the page to connect again.',
 
   'notice.soundLocked': 'Sound is off: click anywhere',

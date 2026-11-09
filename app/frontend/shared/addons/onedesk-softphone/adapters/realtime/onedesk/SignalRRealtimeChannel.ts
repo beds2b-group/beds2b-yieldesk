@@ -121,7 +121,10 @@ export class SignalRRealtimeChannel implements RealtimeChannel {
   private listenTo(connection: HubConnection): HubConnection {
     const { logger } = this.options
     for (const event of Object.keys(HUB_EVENTS) as HubEvent[]) this.forward(connection, event)
-    connection.onreconnecting(() => logger.warn('Realtime channel reconnecting'))
+    connection.onreconnecting(() => {
+      logger.warn('Realtime channel reconnecting')
+      this.events.emit('reconnecting', undefined)
+    })
     connection.onreconnected(() => {
       logger.info('Realtime channel reconnected')
       this.events.emit('reconnected', undefined)

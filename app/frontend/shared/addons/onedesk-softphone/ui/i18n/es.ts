@@ -108,6 +108,8 @@ export const es = {
   'connection.registering': 'Registrando el teléfono…',
   'connection.retrying': 'Se reintentará automáticamente.',
   'connection.retry': 'Reintentar',
+  'connection.realtimeLost':
+    'Sin conexión con One-Desk: reconectando… Si no vuelve, dejarás de recibir llamadas.',
   'connection.signedOut': 'Has salido del teléfono. Recarga la página para volver a conectarte.',
 
   'notice.soundLocked': 'Sonido desactivado: haz clic en cualquier sitio',
