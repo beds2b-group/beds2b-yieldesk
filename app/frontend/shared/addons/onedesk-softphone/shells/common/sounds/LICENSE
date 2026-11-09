@@ -1,0 +1,11 @@
+Sonidos del teléfono (incoming.mp3 y dtmf-*.wav)
+
+Proceden de SaraPhone (https://github.com/gmaruzz/saraphone, autor inicial Giovanni Maruzzelli), a través
+de beds2b-saraphone: incoming.mp3 es mp3/ring.mp3 y dtmf-<tecla>.wav son wav/<tecla>.wav. Se usan sin
+modificar, solo con otro nombre.
+
+Se distribuyen bajo la Mozilla Public License, versión 2.0 (MPL-2.0), la licencia de SaraPhone. Texto
+completo: https://mozilla.org/MPL/2.0/
+
+This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL
+was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.

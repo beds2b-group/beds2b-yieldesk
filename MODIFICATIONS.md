@@ -16,12 +16,12 @@ Este fichero cumple el aviso de modificaciones de la cláusula 5a de la AGPL-3.0
 
 ## Ficheros añadidos por Beds2B
 
-Se distribuyen bajo AGPL-3.0 como parte de esta versión modificada de Zammad.
+Se distribuyen bajo AGPL-3.0 como parte de esta versión modificada de Zammad. El softphone (`app/frontend/shared/addons/onedesk-softphone/` y `app/frontend/entrypoints/softphone.ts`) tiene además licencia MIT en su repositorio de origen, `beds2b-softphone`, y sus sonidos (MPL-2.0) y banderas (MIT) llevan la suya en su carpeta.
 
 | Añadido | Última modificación | Fichero | Contenido |
 |---|---|---|---|
 | 2026-10-30 | 2026-11-09 | `app/frontend/shared/addons/onedesk-softphone/` | Softphone, generado por `zammad:sync` desde `beds2b-softphone` (versión en `VERSION`) |
-| 2026-10-30 | 2026-10-30 | `app/frontend/entrypoints/softphone.ts` | Entrypoint de Vite del softphone en la interfaz clásica, generado por `zammad:sync` |
+| 2026-10-30 | 2026-11-09 | `app/frontend/entrypoints/softphone.ts` | Entrypoint de Vite del softphone en la interfaz clásica, generado por `zammad:sync` |
 | 2026-11-06 | 2026-11-06 | `config/initializers/onedesk_softphone_csp.rb` | Añade a `connect-src` de la CSP los hosts de Voice Insights de Twilio (`eventgw.twilio.com` y `eventgw.ie1.twilio.com`), a los que el SDK del softphone envía la calidad de las llamadas |
 | 2026-11-03 | 2026-11-03 | `public/softphone/config.json` | Configuración del softphone en este entorno (proveedor, ruta de One-Desk, región de Twilio, idioma). No lleva credenciales |
 

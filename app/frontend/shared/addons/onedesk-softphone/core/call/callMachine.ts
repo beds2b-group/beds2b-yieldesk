@@ -1,5 +1,5 @@
 // Copyright (C) 2026 Beds2B. Generado por zammad:sync desde beds2b-softphone: no editar aquí.
-// Se distribuye bajo AGPL-3.0 como parte de esta versión modificada de Zammad. Ver MODIFICATIONS.md.
+// Licencia MIT (LICENSE de beds2b-softphone). Se incluye en esta versión modificada de Zammad, distribuida bajo AGPL-3.0. Ver MODIFICATIONS.md.
 
 // Máquina de estados de la llamada (architecture.md §6.4, ADR-006). Los estados son datos
 // serializables, porque se replican a las demás pestañas (ADR-007).

@@ -1,5 +1,5 @@
 // Copyright (C) 2026 Beds2B. Generado por zammad:sync desde beds2b-softphone: no editar aquí.
-// Se distribuye bajo AGPL-3.0 como parte de esta versión modificada de Zammad. Ver MODIFICATIONS.md.
+// Licencia MIT (LICENSE de beds2b-softphone). Se incluye en esta versión modificada de Zammad, distribuida bajo AGPL-3.0. Ver MODIFICATIONS.md.
 
 // Códigos estables con los que llegan los errores de todos los puertos (architecture.md §5.5). La
 // interfaz los traduce y ofrece reintentar, así que un código nuevo necesita su traducción.

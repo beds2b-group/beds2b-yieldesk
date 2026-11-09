@@ -1,5 +1,5 @@
 // Copyright (C) 2026 Beds2B. Generado por zammad:sync desde beds2b-softphone: no editar aquí.
-// Se distribuye bajo AGPL-3.0 como parte de esta versión modificada de Zammad. Ver MODIFICATIONS.md.
+// Licencia MIT (LICENSE de beds2b-softphone). Se incluye en esta versión modificada de Zammad, distribuida bajo AGPL-3.0. Ver MODIFICATIONS.md.
 
 // Ajustes del agente que viven solo en el navegador (architecture.md §5.3). La pausa es del
 // servidor (One-Desk) y no hay DND: la pausa lo sustituye (DECISIONES.md, diseño #4).
