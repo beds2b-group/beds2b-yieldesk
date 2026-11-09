@@ -14,6 +14,9 @@ export type CallAction =
   | 'mute'
   | 'dtmf'
   | 'transfer'
+  // A un número externo solo con la llamada contestada: One-Desk responde `call_not_active` si suena
+  // (DECISIONES.md, transferencia #8).
+  | 'transfer-external'
   | 'hold'
   | 'resume'
   // Supervisión: escuchar una llamada desde el panel y salir de ella.
@@ -48,8 +51,9 @@ export const availableCallActions = ({
         hasLastDialed ? ['dial', 'redial', 'monitor'] : ['dial', 'monitor'],
       )
     case 'incoming':
-      // También se transfiere mientras suena (DECISIONES.md, núcleo #4). Con la transferencia pedida
-      // ya no se contesta: One-Desk cancela el tramo de este agente.
+      // También se transfiere mientras suena, pero solo a un compañero (DECISIONES.md, núcleo #4 y
+      // transferencia #8). Con la transferencia pedida ya no se contesta: One-Desk cancela el tramo
+      // de este agente.
       if (transferPending) return new Set<CallAction>(['reject'])
       return new Set<CallAction>(['answer', 'reject', 'transfer'])
     case 'outgoing':
@@ -63,7 +67,7 @@ export const availableCallActions = ({
         'dtmf',
         call.heldAt === null ? 'hold' : 'resume',
       ]
-      if (!transferPending) actions.push('transfer')
+      if (!transferPending) actions.push('transfer', 'transfer-external')
       return new Set(actions)
     }
     // Escuchando no se habla: solo se puede salir (DECISIONES.md, supervisión #2).

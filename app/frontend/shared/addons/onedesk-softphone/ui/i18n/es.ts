@@ -79,6 +79,7 @@ export const es = {
   'agents.externalLabel': 'Número externo',
   'agents.externalPlaceholder': 'Transferir a un número',
   'agents.externalTransfer': 'Transferir a este número',
+  'agents.externalAnswerFirst': 'Contesta para transferir a un número',
 
   'supervision.open': 'Panel de supervisión',
   'supervision.title': 'Supervisión',

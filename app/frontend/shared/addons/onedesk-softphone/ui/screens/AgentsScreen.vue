@@ -53,7 +53,10 @@ const strip = computed(() => {
 // Número externo (R2b, DECISIONES.md transferencia #7), con su propio selector de país: no toca lo
 // que hubiera en el marcado.
 const external = usePhoneNumber(dialing)
-const canTransferExternal = computed(() => canTransfer.value && external.hasNumber.value)
+const externalAllowed = computed(() => session.callActions.has('transfer-external'))
+const canTransferExternal = computed(() => externalAllowed.value && external.hasNumber.value)
+// Mientras suena se transfiere a un compañero, pero no a un número (DECISIONES.md, transferencia #8).
+const externalNeedsAnswer = computed(() => canTransfer.value && !externalAllowed.value)
 
 const agents = computed(() =>
   colleagues.state.value.status === 'loaded' ? colleagues.state.value.agents : [],
@@ -140,7 +143,11 @@ watch(pendingTransfer, (current, previous) => {
             autocomplete="off"
             data-testid="external-input"
             :value="external.number.value"
-            :placeholder="t('agents.externalPlaceholder')"
+            :placeholder="
+              externalNeedsAnswer
+                ? t('agents.externalAnswerFirst')
+                : t('agents.externalPlaceholder')
+            "
             @input="external.setNumber(($event.target as HTMLInputElement).value)"
             @keydown.enter.prevent="transferExternal"
           />
@@ -154,7 +161,9 @@ watch(pendingTransfer, (current, previous) => {
             pendingTransfer !== null && 'externalNumber' in pendingTransfer.target,
         }"
         :disabled="!canTransferExternal"
-        :title="t('agents.externalTransfer')"
+        :title="
+          externalNeedsAnswer ? t('agents.externalAnswerFirst') : t('agents.externalTransfer')
+        "
         :aria-label="t('agents.externalTransfer')"
         data-testid="external-transfer"
         @click="transferExternal"

@@ -101,7 +101,8 @@ export class CallController {
   // (DECISIONES.md, transferencia #5).
   async transfer(target: TransferTarget): Promise<void> {
     const { session } = this.deps.state.snapshot
-    if (!this.allows('transfer') || session.status !== 'active') return
+    const action = 'externalNumber' in target ? 'transfer-external' : 'transfer'
+    if (!this.allows(action) || session.status !== 'active') return
     if ('agentId' in target && target.agentId === session.agent.id) return
 
     this.deps.state.patch({ pendingTransfer: { target } })

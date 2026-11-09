@@ -79,6 +79,7 @@ export const en: Messages = {
   'agents.externalLabel': 'External number',
   'agents.externalPlaceholder': 'Transfer to a number',
   'agents.externalTransfer': 'Transfer to this number',
+  'agents.externalAnswerFirst': 'Answer to transfer to a number',
 
   'supervision.open': 'Supervision panel',
   'supervision.title': 'Supervision',
