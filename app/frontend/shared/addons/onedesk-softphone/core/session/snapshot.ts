@@ -58,6 +58,10 @@ export interface SoftphoneSnapshot {
   // Llamada cuya escucha se ha pedido y aún no ha llegado (endpoint 14).
   pendingMonitor: string | null
   realtime: RealtimeStatus
+  // Sube con cada aviso del hub que puede cambiar la lista de compañeros (endpoint 11): cualquier
+  // `agent.status_changed` y cada conexión del hub, también tras una caída. La pantalla Agentes la
+  // vuelve a pedir cuando cambia (DECISIONES.md, transferencia #2). El valor no significa nada.
+  colleaguesRevision: number
   // Último error que el agente tiene que ver (architecture.md §1, objetivo 1). Los del registro y
   // los de la sesión se ven en `registration` y en `session`.
   error: SoftphoneFailure | null
@@ -75,5 +79,6 @@ export const INITIAL_SNAPSHOT: SoftphoneSnapshot = {
   supervision: null,
   pendingMonitor: null,
   realtime: 'idle',
+  colleaguesRevision: 0,
   error: null,
 }

@@ -26,6 +26,10 @@ export const en: Messages = {
   'actions.logout': 'Sign out',
 
   'pause.label': 'Pause reason',
+  'pause.note.label': 'Why are you away?',
+  'pause.note.hint': 'Something general is enough. Do not write health or other personal details.',
+  'pause.note.confirm': 'Pause',
+  'pause.note.cancel': 'Back',
 
   'logout.withCall': 'There is a call in progress. Signing out will hang it up.',
   'logout.confirm': 'Sign out and hang up',
@@ -141,6 +145,8 @@ export const en: Messages = {
   'problems.agent_busy': 'You cannot change your status while handling a call.',
   'problems.invalid_status_transition': 'You cannot switch to that status right now.',
   'problems.invalid_pause_reason': 'That pause reason no longer exists.',
+  'problems.pause_note_required': 'Write why you are away.',
+  'problems.pause_note_not_allowed': 'That pause reason does not take a note.',
   'problems.twilio_error': 'The phone system did not respond. Please try again.',
   'problems.supervisor_busy': 'To listen in you must be available, paused or offline.',
   'problems.already_monitoring': 'You are already listening to that call.',

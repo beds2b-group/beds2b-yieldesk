@@ -17,6 +17,8 @@ const PROBLEM_MESSAGES: Readonly<Record<string, MessageKey>> = {
   agent_busy: 'problems.agent_busy',
   invalid_status_transition: 'problems.invalid_status_transition',
   invalid_pause_reason: 'problems.invalid_pause_reason',
+  pause_note_required: 'problems.pause_note_required',
+  pause_note_not_allowed: 'problems.pause_note_not_allowed',
   twilio_error: 'problems.twilio_error',
   supervisor_busy: 'problems.supervisor_busy',
   already_monitoring: 'problems.already_monitoring',

@@ -50,6 +50,7 @@ export class RealtimeController {
       deps.realtime.on('reconnected', () => {
         if (!this.running) return
         this.setStatus('connected')
+        this.colleaguesChanged()
         this.deps.onConnected?.()
       }),
     ]
@@ -95,6 +96,7 @@ export class RealtimeController {
       }
       this.deps.logger.info('Realtime channel connected', { attempt })
       this.setStatus('connected')
+      this.colleaguesChanged()
       this.deps.onConnected?.()
     } catch (error) {
       if (cycle === this.cycle) this.retry(asSoftphoneError(error, 'network').code, cycle, attempt)
@@ -119,15 +121,24 @@ export class RealtimeController {
     })
   }
 
-  // One-Desk avisa de los cambios de todos los agentes; aquí solo interesa el del propio agente. Un
-  // aviso más antiguo que el estado que ya se tiene (por ejemplo, la respuesta del endpoint 10 llegó
-  // antes) se descarta.
+  // One-Desk avisa de los cambios de todos los agentes. Cualquiera puede cambiar la lista de
+  // compañeros; el estado del teléfono solo cambia con el del propio agente. Un aviso más antiguo
+  // que el estado que ya se tiene (por ejemplo, la respuesta del endpoint 10 llegó antes) se
+  // descarta.
   private handleStatusChange({ agentId, presence }: AgentStatusChange): void {
     const { session, presence: current } = this.deps.state.snapshot
-    if (session.status !== 'active' || session.agent.id !== agentId) return
+    if (session.status !== 'active') return
+    this.colleaguesChanged()
+    if (session.agent.id !== agentId) return
     const currentSince = current?.since ?? null
     if (currentSince !== null && presence.since !== null && presence.since < currentSince) return
     this.deps.state.patch({ presence })
+  }
+
+  // Solo es un aviso: la lista se vuelve a pedir entera al endpoint 11, que tiene la regla de quién
+  // es transferible (DECISIONES.md, transferencia #2).
+  private colleaguesChanged(): void {
+    this.deps.state.patch({ colleaguesRevision: this.deps.state.snapshot.colleaguesRevision + 1 })
   }
 
   private setStatus(realtime: RealtimeStatus): void {

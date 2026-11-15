@@ -17,11 +17,16 @@ export interface PauseReason {
   id: number
   name: string
   icon: string | null
+  // El agente escribe por qué se ausenta («Otro motivo»), que va en `pauseNote`.
+  requiresNote: boolean
 }
+
+// Límite de `pauseNote` en One-Desk (PauseNotePolicy.MaxLength).
+export const PAUSE_NOTE_MAX_LENGTH = 200
 
 export type StatusChange =
   | { status: 'available' }
-  | { status: 'paused'; pauseReasonId: number }
+  | { status: 'paused'; pauseReasonId: number; pauseNote?: string }
   | { status: 'offline' }
 
 // Con una llamada reservada o en curso, One-Desk rechaza cualquier cambio manual (409 agent_busy):

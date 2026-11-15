@@ -95,13 +95,17 @@ export const readPresence = (operation: string, value: unknown): AgentPresence =
   }
 }
 
-// `icon` es el emoji del motivo, o null (PauseReasonResponse de One-Desk).
+// `icon` es el emoji del motivo, o null (PauseReasonResponse de One-Desk). Un One-Desk anterior a
+// «Otro motivo» no envía `requiresNote`: ningún motivo pide texto.
 const readPauseReason = (operation: string, value: unknown): PauseReason => {
   const body = object(operation, value, 'pauseReasons')
+  const requiresNote = body.requiresNote ?? false
+  if (typeof requiresNote !== 'boolean') throw invalid(operation, 'requiresNote')
   return {
     id: integer(operation, body, 'id'),
     name: string(operation, body, 'name'),
     icon: optionalString(operation, body, 'icon'),
+    requiresNote,
   }
 }
 
@@ -162,11 +166,13 @@ export const readAgentSummaries = (value: unknown): readonly AgentSummary[] => {
 export const readVoiceToken = (value: unknown): string =>
   string('voice-token', object('voice-token', value), 'token')
 
-// Cuerpo del endpoint 10.
-export const statusChangeBody = (change: StatusChange): Json =>
-  change.status === 'paused'
+// Cuerpo del endpoint 10. `pauseNote` solo con un motivo que lo pide.
+export const statusChangeBody = (change: StatusChange): Json => {
+  if (change.status !== 'paused') return { status: change.status }
+  return change.pauseNote === undefined
     ? { status: 'paused', pauseReasonId: change.pauseReasonId }
-    : { status: change.status }
+    : { status: 'paused', pauseReasonId: change.pauseReasonId, pauseNote: change.pauseNote }
+}
 
 // Supervisión (endpoint 13 y `supervision.call_updated`). Cada objeto, como SupervisionOverviewResponse
 // de One-Desk.

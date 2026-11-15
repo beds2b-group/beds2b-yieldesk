@@ -26,6 +26,10 @@ export const es = {
   'actions.logout': 'Salir',
 
   'pause.label': 'Motivo de la pausa',
+  'pause.note.label': '¿Por qué te ausentas?',
+  'pause.note.hint': 'Algo general basta. No escribas datos de salud ni otros datos personales.',
+  'pause.note.confirm': 'Pausar',
+  'pause.note.cancel': 'Volver',
 
   'logout.withCall': 'Hay una llamada en curso. Si sales, se colgará.',
   'logout.confirm': 'Salir y colgar',
@@ -141,6 +145,8 @@ export const es = {
   'problems.agent_busy': 'No puedes cambiar de estado mientras atiendes una llamada.',
   'problems.invalid_status_transition': 'Ahora no puedes pasar a ese estado.',
   'problems.invalid_pause_reason': 'Ese motivo de pausa ya no existe.',
+  'problems.pause_note_required': 'Escribe por qué te ausentas.',
+  'problems.pause_note_not_allowed': 'Ese motivo de pausa no lleva texto.',
   'problems.twilio_error': 'La centralita no ha respondido. Inténtalo de nuevo.',
   'problems.supervisor_busy': 'Para escuchar tienes que estar disponible, en pausa o desconectado.',
   'problems.already_monitoring': 'Ya estás escuchando esa llamada.',

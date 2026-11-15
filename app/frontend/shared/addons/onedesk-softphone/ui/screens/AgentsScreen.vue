@@ -27,7 +27,10 @@ const now = useNow()
 
 // Pantalla de transferencia del diseño: la llamada arriba, los compañeros del endpoint 11 y un pie
 // que dice qué se puede hacer. Transferir no la cierra: se cierra cuando la llamada termina.
-const colleagues = useColleagues(() => engine.listAgents())
+const colleagues = useColleagues(
+  () => engine.listAgents(),
+  () => session.snapshot.colleaguesRevision,
+)
 const call = computed(() => session.snapshot.call)
 const pendingTransfer = computed(() => session.snapshot.pendingTransfer)
 const canTransfer = computed(() => session.callActions.has('transfer'))
