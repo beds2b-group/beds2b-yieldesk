@@ -62,6 +62,7 @@ export const en: Messages = {
   'call.hold': 'Put on hold',
   'call.resume': 'Resume',
   'call.onHold': 'Customer on hold · {duration}',
+  'call.hiddenNumber': 'Hidden number',
 
   'hangup.onHold': 'The customer is on hold. Hang up the call?',
   'hangup.confirm': 'Hang up',

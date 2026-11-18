@@ -62,6 +62,7 @@ export const es = {
   'call.hold': 'Poner en espera',
   'call.resume': 'Retomar',
   'call.onHold': 'Cliente en espera · {duration}',
+  'call.hiddenNumber': 'Número oculto',
 
   'hangup.onHold': 'El cliente está en espera. ¿Colgar la llamada?',
   'hangup.confirm': 'Colgar',

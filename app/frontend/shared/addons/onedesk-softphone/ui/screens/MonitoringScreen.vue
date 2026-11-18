@@ -6,6 +6,7 @@ import { computed } from 'vue'
 import CallStrip from '../components/CallStrip.vue'
 import SoftphoneIcon from '../components/SoftphoneIcon.vue'
 import { useNow } from '../composables/useNow.ts'
+import { callerLabel } from '../format/callerLabel.ts'
 import { formatDuration } from '../format/formatDuration.ts'
 import { useI18n } from '../i18n/useI18n.ts'
 import { useSoftphoneSessionStore } from '../stores/onedeskSoftphoneSession.ts'
@@ -38,7 +39,11 @@ const agentLine = computed(() => {
       {{ t('monitoring.title') }}
     </p>
 
-    <CallStrip :peer="monitoring?.customer ?? ''" :detail="detail" :live="true" />
+    <CallStrip
+      :peer="monitoring === null ? '' : callerLabel(t, monitoring.customer)"
+      :detail="detail"
+      :live="true"
+    />
 
     <p class="sp-monitoring__agent" data-testid="monitoring-agent">{{ agentLine }}</p>
     <p class="sp-monitoring__hint">{{ t('monitoring.hint') }}</p>

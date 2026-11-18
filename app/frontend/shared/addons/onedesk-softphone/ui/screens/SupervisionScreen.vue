@@ -5,6 +5,7 @@ import { computed } from 'vue'
 
 import SoftphoneIcon from '../components/SoftphoneIcon.vue'
 import { useNow } from '../composables/useNow.ts'
+import { callerLabel } from '../format/callerLabel.ts'
 import { formatDuration } from '../format/formatDuration.ts'
 import { initials } from '../format/initials.ts'
 import { useI18n } from '../i18n/useI18n.ts'
@@ -137,7 +138,7 @@ const listen = (call: ActiveCall): void => {
           data-testid="active-call-row"
         >
           <span class="sp-supervision__info">
-            <span class="sp-supervision__primary">{{ call.customerNumber }}</span>
+            <span class="sp-supervision__primary">{{ callerLabel(t, call.customerNumber) }}</span>
             <span class="sp-supervision__meta">
               <span class="sp-supervision__agent">
                 {{ call.agent?.fullName ?? t('supervision.noAgent') }}
@@ -167,10 +168,14 @@ const listen = (call: ActiveCall): void => {
             :class="{ 'sp-supervision__listen--pending': pendingMonitor === call.id }"
             :disabled="!canListen(call)"
             :title="
-              t('supervision.listenTo', { name: call.agent?.fullName ?? call.customerNumber })
+              t('supervision.listenTo', {
+                name: call.agent?.fullName ?? callerLabel(t, call.customerNumber),
+              })
             "
             :aria-label="
-              t('supervision.listenTo', { name: call.agent?.fullName ?? call.customerNumber })
+              t('supervision.listenTo', {
+                name: call.agent?.fullName ?? callerLabel(t, call.customerNumber),
+              })
             "
             data-testid="listen"
             @click="listen(call)"
@@ -198,7 +203,7 @@ const listen = (call: ActiveCall): void => {
           data-testid="waiting-call-row"
         >
           <span class="sp-supervision__info">
-            <span class="sp-supervision__primary">{{ call.customerNumber }}</span>
+            <span class="sp-supervision__primary">{{ callerLabel(t, call.customerNumber) }}</span>
             <span class="sp-supervision__meta">
               {{ t('supervision.waitingFor', { duration: since(call.receivedAt) }) }}
             </span>

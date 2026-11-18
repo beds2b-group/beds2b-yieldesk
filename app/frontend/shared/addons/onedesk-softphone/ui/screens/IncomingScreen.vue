@@ -6,6 +6,7 @@ import { computed } from 'vue'
 import ActionBar from '../components/ActionBar.vue'
 import CallStrip from '../components/CallStrip.vue'
 import SoftphoneIcon from '../components/SoftphoneIcon.vue'
+import { callerLabel } from '../format/callerLabel.ts'
 import { useI18n } from '../i18n/useI18n.ts'
 import { useSoftphoneSessionStore } from '../stores/onedeskSoftphoneSession.ts'
 import { useSoftphoneUiStore } from '../stores/onedeskSoftphoneUi.ts'
@@ -15,7 +16,7 @@ const ui = useSoftphoneUiStore()
 const { t } = useI18n()
 
 const from = computed(() =>
-  session.snapshot.call.status === 'incoming' ? session.snapshot.call.from : '',
+  session.snapshot.call.status === 'incoming' ? callerLabel(t, session.snapshot.call.from) : '',
 )
 </script>
 

@@ -9,6 +9,7 @@ import DialKeypad from '../components/DialKeypad.vue'
 import HangupConfirm from '../components/HangupConfirm.vue'
 import SoftphoneIcon from '../components/SoftphoneIcon.vue'
 import { useNow } from '../composables/useNow.ts'
+import { callerLabel } from '../format/callerLabel.ts'
 import { formatDuration } from '../format/formatDuration.ts'
 import { useI18n } from '../i18n/useI18n.ts'
 import { useSoftphoneSessionStore } from '../stores/onedeskSoftphoneSession.ts'
@@ -26,7 +27,9 @@ const now = useNow()
 const call = computed(() => session.snapshot.call)
 const muted = computed(() => call.value.status === 'in-call' && call.value.muted)
 const peer = computed(() =>
-  call.value.status === 'in-call' || call.value.status === 'ending' ? call.value.peer : '',
+  call.value.status === 'in-call' || call.value.status === 'ending'
+    ? callerLabel(t, call.value.peer)
+    : '',
 )
 const detail = computed(() =>
   call.value.status === 'in-call'

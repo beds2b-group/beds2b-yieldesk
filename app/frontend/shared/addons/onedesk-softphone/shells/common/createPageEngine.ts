@@ -7,6 +7,7 @@ import { LocalStorageStore } from '../../adapters/storage/LocalStorageStore.ts'
 import { SingleTabCoordinator } from '../../adapters/tabs/SingleTabCoordinator.ts'
 import { WebLocksTabCoordinator } from '../../adapters/tabs/WebLocksTabCoordinator.ts'
 import { createSoftphoneEngine } from '../../core/session/createSoftphoneEngine.ts'
+import { callerLabel } from '../../ui/format/callerLabel.ts'
 import { createTranslate } from '../../ui/i18n/translate.ts'
 
 import type { UiConfig } from '../../config/SoftphoneConfig.ts'
@@ -64,7 +65,7 @@ export const createPageEngine = async (options: PageEngineOptions): Promise<Soft
     sounds,
     notifier: new BrowserNotifier({
       title: t('notification.title'),
-      formatBody: (from) => t('notification.body', { from }),
+      formatBody: (from) => t('notification.body', { from: callerLabel(t, from) }),
     }),
     store: new LocalStorageStore(window.localStorage, logger),
     clock: new SystemClock(),

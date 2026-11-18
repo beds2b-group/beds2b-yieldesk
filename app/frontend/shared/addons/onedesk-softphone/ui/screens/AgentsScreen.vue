@@ -9,6 +9,7 @@ import SoftphoneIcon from '../components/SoftphoneIcon.vue'
 import { useColleagues } from '../composables/useColleagues.ts'
 import { useNow } from '../composables/useNow.ts'
 import { usePhoneNumber } from '../composables/usePhoneNumber.ts'
+import { callerLabel } from '../format/callerLabel.ts'
 import { formatDuration } from '../format/formatDuration.ts'
 import { initials } from '../format/initials.ts'
 import { useI18n } from '../i18n/useI18n.ts'
@@ -40,14 +41,14 @@ const strip = computed(() => {
   switch (current.status) {
     case 'in-call':
       return {
-        peer: current.peer,
+        peer: callerLabel(t, current.peer),
         detail: formatDuration(current.startedAt, now.value),
         live: true,
       }
     case 'incoming':
-      return { peer: current.from, detail: t('incoming.title'), live: false }
+      return { peer: callerLabel(t, current.from), detail: t('incoming.title'), live: false }
     case 'ending':
-      return { peer: current.peer, detail: t('call.ending'), live: false }
+      return { peer: callerLabel(t, current.peer), detail: t('call.ending'), live: false }
     default:
       return { peer: t('agents.noCall'), detail: '--:--', live: false }
   }
