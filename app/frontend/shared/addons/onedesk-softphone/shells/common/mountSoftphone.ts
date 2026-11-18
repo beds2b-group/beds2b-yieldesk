@@ -7,6 +7,7 @@ import {
   type SoftphoneElement,
 } from './defineSoftphoneElement.ts'
 import { FirstGestureSoundUnlock } from './firstGestureSoundUnlock.ts'
+import { keepTypingInside } from './keepTypingInside.ts'
 
 import type { UiConfig } from '../../config/SoftphoneConfig.ts'
 import type { Logger } from '../../core/ports/Logger.ts'
@@ -78,6 +79,8 @@ export const mountSoftphone = async ({
   element.dataset.position = ui.position
   element.style.zIndex = String(ui.zIndex)
   document.body.append(element)
+  // Escribir en un campo del teléfono no dispara los atajos de teclado de Zammad.
+  const releaseTyping = keepTypingInside(element)
 
   // Recargar o cambiar de interfaz con una llamada la corta: el navegador pide confirmación
   // (architecture.md §8.3).
@@ -92,6 +95,7 @@ export const mountSoftphone = async ({
     async unmount() {
       window.removeEventListener('beforeunload', warnBeforeUnload)
       sound.dispose()
+      releaseTyping()
       element.remove()
       await engine.destroy()
     },
