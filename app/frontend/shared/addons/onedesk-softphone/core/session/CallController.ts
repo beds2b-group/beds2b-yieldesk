@@ -14,6 +14,7 @@ import type { BackendApi } from '../ports/BackendApi.ts'
 import type { Clock } from '../ports/Clock.ts'
 import type { Logger } from '../ports/Logger.ts'
 import type { Notifier } from '../ports/Notifier.ts'
+import type { TransferFailure } from '../ports/RealtimeChannel.ts'
 import type { SoundPlayer } from '../ports/SoundPlayer.ts'
 
 export interface CallControllerDependencies {
@@ -118,6 +119,19 @@ export class CallController {
         this.deps.sounds.play('incoming', { loop: true })
       }
     }
+  }
+
+  // Aviso `transfer.failed` del hub: el destino no ha entrado en la llamada. El agente sigue con el
+  // cliente, puede pedir otra transferencia y ve por qué ha fallado. Sin transferencia pendiente (la
+  // llamada ya terminó, u otra pestaña la dio por fallida antes) no hay nada que deshacer.
+  handleTransferFailed(failure: TransferFailure): void {
+    if (this.deps.state.snapshot.pendingTransfer === null) return
+    this.deps.state.patch({ pendingTransfer: null })
+    this.report(
+      new SoftphoneError('conflict', `Transfer ${failure.reason}`, {
+        problem: `transfer_${failure.reason}`,
+      }),
+    )
   }
 
   // Espera del cliente (endpoints 19 y 20). La espera la lleva One-Desk, no el proveedor: el estado

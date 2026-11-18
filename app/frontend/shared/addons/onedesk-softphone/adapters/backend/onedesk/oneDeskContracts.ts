@@ -12,7 +12,11 @@ import type {
   StatusChange,
 } from '../../../core/agent/agentStatus.ts'
 import type { AgentDetails, AgentSummary } from '../../../core/ports/BackendApi.ts'
-import type { AgentStatusChange, CallOffer } from '../../../core/ports/RealtimeChannel.ts'
+import type {
+  AgentStatusChange,
+  CallOffer,
+  TransferFailure,
+} from '../../../core/ports/RealtimeChannel.ts'
 import type {
   ActiveCall,
   SupervisedAgent,
@@ -272,6 +276,20 @@ export const readCallOffer = (value: unknown): CallOffer => {
     kind: kind as CallOffer['kind'],
     customerNumber: string(operation, body, 'customerNumber'),
   }
+}
+
+const TRANSFER_FAILURE_REASONS: readonly TransferFailure['reason'][] = ['no_answer', 'failed']
+
+// Evento transfer.failed del hub (TransferFailedMessage de One-Desk). `transferId` no se lee: el
+// teléfono solo tiene una transferencia pendiente a la vez.
+export const readTransferFailure = (value: unknown): TransferFailure => {
+  const operation = 'transfer.failed'
+  const body = object(operation, value)
+  const reason = string(operation, body, 'reason')
+  if (!(TRANSFER_FAILURE_REASONS as readonly string[]).includes(reason)) {
+    throw invalid(operation, 'reason')
+  }
+  return { callId: string(operation, body, 'callId'), reason: reason as TransferFailure['reason'] }
 }
 
 // Evento agent.status_changed del hub (AgentStatusChangedMessage de One-Desk): el mismo estado que el

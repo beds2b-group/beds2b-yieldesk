@@ -138,6 +138,8 @@ export const es = {
 
   'problems.target_unavailable': 'Ese agente ya no está disponible.',
   'problems.transfer_in_progress': 'Ya hay una transferencia en curso.',
+  'problems.transfer_no_answer': 'No contesta. La llamada sigue contigo.',
+  'problems.transfer_failed': 'No se ha podido transferir. La llamada sigue contigo.',
   'problems.call_not_active': 'La llamada ya no está activa.',
   'problems.not_your_call': 'Esta llamada ya no es tuya.',
   'problems.invalid_number': 'El número no es válido: escríbelo con el prefijo del país.',

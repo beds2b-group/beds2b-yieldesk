@@ -22,9 +22,19 @@ export interface CallOffer {
   customerNumber: string
 }
 
+// Aviso `transfer.failed`: el destino de la transferencia que pidió este agente no ha entrado en la
+// llamada (`no_answer` si no contestó o comunicaba, `failed` si no se pudo llamar). El agente sigue
+// hablando con el cliente.
+export interface TransferFailure {
+  callId: string
+  reason: 'no_answer' | 'failed'
+}
+
 export interface RealtimeEventMap {
   agentStatusChanged: AgentStatusChange
   callOffered: CallOffer
+  // Solo llega al agente que pidió la transferencia.
+  transferFailed: TransferFailure
   // Solo llega a `supervisor` y `admin` (grupo `supervisors` del hub).
   supervisionCallUpdated: SupervisionCallUpdate
   // La conexión se ha cortado y el adaptador está intentando recuperarla solo.

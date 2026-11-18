@@ -138,6 +138,8 @@ export const en: Messages = {
 
   'problems.target_unavailable': 'That agent is no longer available.',
   'problems.transfer_in_progress': 'A transfer is already in progress.',
+  'problems.transfer_no_answer': 'No answer. The call is still yours.',
+  'problems.transfer_failed': 'The transfer could not be made. The call is still yours.',
   'problems.call_not_active': 'The call is no longer active.',
   'problems.not_your_call': 'This call is no longer yours.',
   'problems.invalid_number': 'The number is not valid: include the country code.',

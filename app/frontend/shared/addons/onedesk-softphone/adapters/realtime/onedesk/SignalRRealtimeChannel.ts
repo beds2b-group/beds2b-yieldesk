@@ -7,6 +7,7 @@ import {
   readAgentStatusChange,
   readCallOffer,
   readSupervisionCallUpdate,
+  readTransferFailure,
 } from '../../backend/onedesk/oneDeskContracts.ts'
 
 import type { CreateHubConnection, HubConnection } from './signalrSdk.ts'
@@ -14,10 +15,12 @@ import type { Logger } from '../../../core/ports/Logger.ts'
 import type { RealtimeChannel, RealtimeEventMap } from '../../../core/ports/RealtimeChannel.ts'
 
 // Nombres de los eventos del hub (EventsHubContract de One-Desk) que atiende el teléfono, con su
-// lectura. Los demás (`call.answered`, `transfer.*`…) llegarán cuando una pantalla los necesite.
+// lectura. Los demás (`call.answered`, `transfer.started`, `transfer.completed`…) no hacen falta: el
+// proveedor ya avisa de cuándo entra o sale el teléfono de la llamada.
 export const HUB_EVENTS = {
   agentStatusChanged: 'agent.status_changed',
   callOffered: 'call.offered',
+  transferFailed: 'transfer.failed',
   supervisionCallUpdated: 'supervision.call_updated',
 } as const
 
@@ -26,6 +29,7 @@ type HubEvent = keyof typeof HUB_EVENTS
 const READERS: { [TEvent in HubEvent]: (message: unknown) => RealtimeEventMap[TEvent] } = {
   agentStatusChanged: readAgentStatusChange,
   callOffered: readCallOffer,
+  transferFailed: readTransferFailure,
   supervisionCallUpdated: readSupervisionCallUpdate,
 }
 

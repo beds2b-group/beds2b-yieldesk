@@ -96,6 +96,7 @@ export class LocalEngine implements SoftphoneEngine {
     this.subscriptions.push(
       this.state.subscribe((snapshot) => deps.tabs.publishState(snapshot)),
       deps.tabs.onCommand((command) => this.dispatch(command)),
+      deps.realtime.on('transferFailed', (failure) => this.calls.handleTransferFailed(failure)),
     )
   }
 

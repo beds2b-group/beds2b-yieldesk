@@ -10,6 +10,9 @@ import type { Translate } from '../i18n/translate.ts'
 const PROBLEM_MESSAGES: Readonly<Record<string, MessageKey>> = {
   target_unavailable: 'problems.target_unavailable',
   transfer_in_progress: 'problems.transfer_in_progress',
+  // No vienen de un ProblemDetails sino del aviso `transfer.failed` del hub.
+  transfer_no_answer: 'problems.transfer_no_answer',
+  transfer_failed: 'problems.transfer_failed',
   call_not_active: 'problems.call_not_active',
   not_your_call: 'problems.not_your_call',
   invalid_number: 'problems.invalid_number',
