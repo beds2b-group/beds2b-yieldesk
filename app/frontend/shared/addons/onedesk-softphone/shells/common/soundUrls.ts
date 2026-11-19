@@ -1,6 +1,7 @@
 // Copyright (C) 2026 Beds2B. Generado por zammad:sync desde beds2b-softphone: no editar aquí.
 // Licencia MIT (LICENSE de beds2b-softphone). Se incluye en esta versión modificada de Zammad, distribuida bajo AGPL-3.0. Ver MODIFICATIONS.md.
 
+import disconnect from './sounds/disconnect.wav'
 import dtmf0 from './sounds/dtmf-0.wav'
 import dtmf1 from './sounds/dtmf-1.wav'
 import dtmf2 from './sounds/dtmf-2.wav'
@@ -18,10 +19,12 @@ import incoming from './sounds/incoming.mp3'
 import type { SoundUrls } from '../../adapters/sounds/HtmlAudioSoundPlayer.ts'
 
 // Sonidos del softphone actual (inventario §3.5), empaquetados con el build: la CSP solo permite
-// `media-src 'self'` (DECISIONES.md, adaptadores #3). Los de saliente y desconexión siguen
-// pendientes (P6): sin URL, no suenan.
+// `media-src 'self'` (DECISIONES.md, adaptadores #3). El de colgar es propio, generado con
+// scripts/generate-sounds.mjs. El de saliente no existe: el SDK lo tiene apagado, porque el tono de
+// llamada ya lo pone la conferencia (DECISIONES.md, «Sonido de colgar»).
 export const SOUND_URLS: SoundUrls = {
   incoming,
+  disconnect,
   'dtmf-0': dtmf0,
   'dtmf-1': dtmf1,
   'dtmf-2': dtmf2,

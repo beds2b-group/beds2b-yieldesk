@@ -9,3 +9,9 @@ completo: https://mozilla.org/MPL/2.0/
 
 This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL
 was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+disconnect.wav
+
+Lo genera scripts/generate-sounds.mjs de beds2b-softphone (tres pitidos a 425 Hz). No procede de SaraPhone
+ni de ningún tercero: va con la licencia del softphone (MIT, LICENSE de beds2b-softphone), no con la MPL-2.0
+de arriba.
