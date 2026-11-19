@@ -4,7 +4,6 @@
 import { EventEmitter, type Listener, type Unsubscribe } from '../ports/events.ts'
 
 import { LocalEngine, type LocalEngineDependencies } from './LocalEngine.ts'
-import { NewTicketOnAnswer } from './NewTicketOnAnswer.ts'
 import { ReplicaEngine } from './ReplicaEngine.ts'
 
 import type { EngineCommand } from './commands.ts'
@@ -24,13 +23,11 @@ export interface SoftphoneEngineDependencies extends LocalEngineDependencies {
 
 // El engine de cada pestaña según su rol: LocalEngine en la líder y ReplicaEngine en las demás. Si
 // la líder se cierra, otra pestaña toma el bloqueo y aquí se cambia de engine sin que la interfaz se
-// entere (ADR-007). Las órdenes del widget CTI de Zammad entran por aquí, sea cual sea el rol, y
-// desde aquí se abre el «Nuevo ticket» al contestar (NewTicketOnAnswer).
+// entere (ADR-007). Las órdenes del widget CTI de Zammad entran por aquí, sea cual sea el rol.
 class RoleSwitchingEngine implements SoftphoneEngine {
   private readonly deps: SoftphoneEngineDependencies
   private readonly events = new EventEmitter<SwitchingEvents>()
   private readonly subscriptions: Unsubscribe[] = []
-  private readonly newTicketOnAnswer: NewTicketOnAnswer
   private engine: SoftphoneEngine
   private unsubscribeEngine: Unsubscribe
   // Los cambios de rol se aplican en orden, aunque lleguen mientras se destruye el engine anterior.
@@ -38,7 +35,6 @@ class RoleSwitchingEngine implements SoftphoneEngine {
 
   constructor(deps: SoftphoneEngineDependencies) {
     this.deps = deps
-    this.newTicketOnAnswer = new NewTicketOnAnswer(deps.host)
     this.engine = this.createEngine(deps.tabs.role)
     this.unsubscribeEngine = this.follow(this.engine)
     this.subscriptions.push(
@@ -62,7 +58,6 @@ class RoleSwitchingEngine implements SoftphoneEngine {
   }
 
   dispatch(command: EngineCommand): void {
-    if (command.type === 'answer') this.newTicketOnAnswer.answerRequested()
     this.engine.dispatch(command)
   }
 
@@ -100,7 +95,6 @@ class RoleSwitchingEngine implements SoftphoneEngine {
 
   private follow(engine: SoftphoneEngine): Unsubscribe {
     return engine.subscribe((snapshot) => {
-      this.newTicketOnAnswer.observe(snapshot, engine.tabRole)
       this.events.emit('change', snapshot)
     })
   }
