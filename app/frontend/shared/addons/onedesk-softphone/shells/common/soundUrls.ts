@@ -15,15 +15,18 @@ import dtmf9 from './sounds/dtmf-9.wav'
 import dtmfHash from './sounds/dtmf-hash.wav'
 import dtmfStar from './sounds/dtmf-star.wav'
 import incoming from './sounds/incoming.mp3'
+import silence from './sounds/silence.wav'
 
 import type { SoundUrls } from '../../adapters/sounds/HtmlAudioSoundPlayer.ts'
 
 // Sonidos del softphone actual (inventario §3.5), empaquetados con el build: la CSP solo permite
 // `media-src 'self'` (DECISIONES.md, adaptadores #3). El de colgar es propio, generado con
-// scripts/generate-sounds.mjs. El de saliente no existe: el SDK lo tiene apagado, porque el tono de
-// llamada ya lo pone la conferencia (DECISIONES.md, «Sonido de colgar»).
+// scripts/generate-sounds.mjs. El de saliente es un silencio: el SDK lo tiene apagado, porque el tono
+// de llamada ya lo pone la conferencia, pero lo descarga al crear el Device y, sin URL propia, iría
+// al CDN de Twilio, que la CSP bloquea (DECISIONES.md, «Sonido de colgar»).
 export const SOUND_URLS: SoundUrls = {
   incoming,
+  outgoing: silence,
   disconnect,
   'dtmf-0': dtmf0,
   'dtmf-1': dtmf1,
